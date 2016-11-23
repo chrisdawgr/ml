@@ -267,25 +267,34 @@ In order for a square matrix to be invertible, it must have full rank, that is f
 \subsection{Question 1}
 \begin{align*}
 f(x) &= \dfrac{1}{e^{-x} +1} \\ \\
-&=  \frac{\partial}{\partial x}
+\frac{\partial}{\partial x} f(x) &=  \frac{\partial}{\partial x}
   \left[\dfrac{1}{e^{-x} +1}\right] \\ \\
 &= - \dfrac{ \frac{\partial}{\partial x} \left[e^{-x}+1 \right] }
-           {(e^{-x}+1)^2}\\ \\
+           {(e^{-x}+1)^2} \textsl{  \hspace{1cm}  (Reciprocal rule)}\\ \\
 &= - \dfrac{\frac{\partial}{\partial x} \left[e^{-x} \right] + \frac{\partial}{\partial x} \left[1 \right]}
            {(e^{-x}+1)^2}\\ \\
 &= - \dfrac{ e^{-x} \frac{\partial}{\partial x} \left[-x \right] +0}
-           {(e^{-x}+1)^2} \\ \\
+           {(e^{-x}+1)^2} \textsl{  \hspace{0,6cm}  (Exponential function rule)} \\ \\
 &= - \dfrac{ e^{-x} -\frac{\partial}{\partial x} \left[x \right]}
            {(e^{-x}+1)^2} \\ \\
 &= \dfrac{ e^{-x} }
            {(e^{-x}+1)^2}
 \end{align*}
 \subsection{Question 2}
+\begin{align*}
+f(w,x) &= 2 (wx+5)^2 \\ \\
+\frac{\partial}{\partial w} f(w,x) &= \frac{\partial}{\partial w} \left[2(wx+5)^2\right] \\ \\
+&= 2 \frac{\partial}{\partial w} \left[(wx+5)^2\right] \\ \\
+&= 2 \times 2 (wx+5) \frac{\partial}{\partial w} \left[wx+5\right] \textsl{  \hspace{1cm}  (Power rule)} \\ \\
+&= 4 (x \frac{\partial}{\partial w} \left[ w \right] + \frac{\partial}{\partial w} \left[ 5 \right]) (wx+5)\\ \\
+&= 4(1x+0)(wx+5) \\ \\
+&= 4x(wx+5) \\ \\
+\end{align*}
 \section{3. Probability Theory: Sample Space}
 \subsection{Question 1}
 The sample space $\Omega$ is the set of possible outcomes. \\
-There are three different colours, 9 balls, 2  balls are picked from the urn uniformly at random. The size of the sample space is $|\Omega| = \texttt{colours}^{\texttt{picks}} = 3^2 = 9$, the possible outcomes are:
-$$ \Omega = \left\lbrace \texttt{RR, RO, OO, OR, OB, BB, BR, BO} \right\rbrace $$
+There are three different colours, 9 balls. 2  balls are picked from the urn uniformly at random. In the urn there is 5 red balls, 3 orange balls and 1 blue ball. Each colour is denoted by its starting letter in capital. The size of the sample space is $|\Omega| = \texttt{colours}^{\texttt{picks}} = 3^2 = 9$, the possible outcomes are:
+$$ \Omega = \left\lbrace \texttt{RR, RO, RB , OO, OR, OB, BB, BR, BO} \right\rbrace $$
 % NOTE: BB not a possible outcome should not be in sample space.
 \subsection{Question 2}
 \begin{table}[H]
@@ -316,12 +325,22 @@ therefore:
 $$ Pr[X=0] = 5/12 $$
 \subsection{Question 5}
 To compute the expected value of $X$, i will use the general formula:
-$$
+\begin{equation}
 \mathbf{E}[X] = \sum\limits_{x \in \mathbf{X}} x  Pr[\mathbf{X} = x]
+\label{expectation}
+\end{equation}
+We saw from question 3 that the possible outcomes for $X$ is 0,1 or 2, to get the probability of each value, each sample space satisfying one of the values are summed for the specific value.
+\begin{align*}
+Pr[X=0] &= \dfrac{5}{18} + \dfrac{5}{72} + \dfrac{5}{72} = \dfrac{5}{12} \\
+Pr[X=1] &= \dfrac{5}{24} + \dfrac{5}{24} + \dfrac{1}{24} + \dfrac{1}{24} = \dfrac{1}{2} \\
+Pr[X=2] &= \dfrac{1}{12} \\
+\end{align*}
+The numbers can now be put into \eqref{expectation}:
 $$
-
-Before picking any ball the probability of picking an orange ball is $ 1 \times 3 / 9 + 2 \times 3 = 1 $ Thus the expected number of orange balls picked is 1.
-% NOTE: not sure about this
+\mathbf{E}[X] = (0 \times \dfrac{5}{12}) + (1 \times \dfrac{1}{2}) + (2 \times \dfrac{1}{12}) = \dfrac{2}{3}
+$$
+Thus the expected number of orange balls picked is $ \dfrac{2}{3}$
+% NOTE: seems wrong that it is less than one
 \section{4. Probability Theory: Properties of Expectation }
 \subsection{Question 1}
 Proof of: $ \mathbf{E}[X+Y]= \mathbf{E}[X] + \mathbf{E}[Y]$
@@ -336,16 +355,34 @@ Step 3 to 4 uses the rule of total probability : $ \sum\limits_{x} Pr(X=x,Y=y) =
 \subsection{Question 2}
 Proof of: $ \mathbf{E}[XY]= \mathbf{E}[X] \mathbf{E}[Y]$
 \begin{align}
-\mathbf{E}[XY] &= \sum\limits{x,y} Pr(X=x,Y=y) \\
-&= \sum\limits{x}\sum\limits{y} xy Pr(X=x,Y=y) \\
-&= \sum\limits{x}\sum\limits{y} xy Pr(X=x)Pr(Y=y) \texttt{  (Independent)} \\
-&= \sum\limits{x}x Pr(X=x)\sum\limits{y} y Pr (Y=y) \\
+\mathbf{E}[XY] &= \sum\limits_{x,y} Pr(X=x,Y=y) \\
+&= \sum\limits_{x}\sum\limits_{y} xy Pr(X=x,Y=y) \\
+&= \sum\limits_{x}\sum\limits_{y} xy Pr(X=x)Pr(Y=y) \texttt{  (Independent)} \\
+&= \sum\limits_{x}x Pr(X=x)\sum\limits_{y} y Pr (Y=y) \\
 &= \mathbf{E}[X] \mathbf{E}[Y] \\
 \end{align}
-where step step 8 follows from X and Y being independent random variable.
+where step 8 follows from X and Y being independent random variables.
 \subsection{Question 3}
 \subsection{Question 4}
+Proof of $ \mathbf{E}[\mathbf{E}[X]] = \mathbf{E}[X] $
 \subsection{Question 5}
+Proof of $\mathbf{E}\left[(X-\mathbf{E}[X])^2 \right] = 
+\mathbf{E}[X^2]-\left( \mathbf{E}[X] \right) ^2:
+$
+\begin{align*}
+\mathbf{E}\left[(X-\mathbf{E}[X])^2 \right] &=
+\mathbf{E}\left[X^2-2\mathbf{E}[X]X+  \left(\mathbf{E}[X]\right)^2 \right]\\
+&=
+\mathbf{E}[X^2]-2\mathbf{E}[X]\mathbf{E}[X]+\left(\mathbf{E}[X]\right)^2 \\
+&=
+\mathbf{E}[X^2]-2 \left(\mathbf{E}[X]\right)^2 +\left(\mathbf{E}[X]\right)^2 \\
+&=
+\mathbf{E}[X^2]-\left(\mathbf{E}[X]\right)^2\\
+\end{align*}
+Thus proving that $\mathbf{E}\left[(X-\mathbf{E}[X])^2 \right] = 
+\mathbf{E}[X^2]-\left( \mathbf{E}[X] \right) ^2$.
+
+
 \section{5. Probability Theory: Complements of Events}
 \subsection{Question 1}
 We denote the complement of an event A by $\overline{A}$. We define the complement as $\overline{A} = \Omega \diagup A$, thus noting that $A$ and its complement are mutually exclusive, meaning we can write $Pr[A\cup B] = Pr[A] + Pr[B]$. \\
@@ -374,8 +411,25 @@ $$
 Pr[10,2] = \binom{10}{2} \left(\dfrac{1}{2}^2\right)\left(1-\dfrac{1}{2}\right)^8
 \approx 0.956
 $$
-
-
+% NOTE: Perhaps should be added with for one as it is at least, no maybe not 
+\section{6. Probability Theory: Coin Flips}
+A coin is flipped 10 times the following sub assignments about finding probabilities of different events.
+\subsection{Question 1}
+As the coin was flipped 10 times, the number of heads must be equal to the number of tails iff. there are 5 heads and 5 tails. Again i will use the binomial distribution to calculate the probability of the event:
+$$
+Pr[10,5] = \binom{10}{5} \left(\dfrac{1}{2}^5\right)\left(1-\dfrac{1}{2}\right)^5
+\approx 0.246
+$$
+\subsection{Question 2}
+The probability of getting more heads than tails will be calculated using binomial distruibtion. The probability must be added for the events of getting 6,7,8,9 and 10 heads, as any of these events will satisfy the question. This probability can be expressed as followed:
+$$
+Pr[\texttt{"more heads than tails"}] = \dfrac{\binom{10}{6} + \binom{10}{7} + \binom{10}{8} + \binom{10}{9} + \binom{10}{10}}{2^{10}} \approx 0.376
+$$
+\subsection{Question 3}
+The \textit{ith} flip and the (11-i)\textit{th} flip are the same for i = 1,2,3,4,5. Flipping the coin for i = 1,2,3,4,5 generates $2^5$ possible outcomes. Thus yielding the probability:
+$$
+\dfrac{2^5}{2^{10}} = \dfrac{1}{32}
+$$
 
 \end{document}
 

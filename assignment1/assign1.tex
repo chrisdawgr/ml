@@ -312,7 +312,6 @@ $ \textsf{Pr}[\textsf{"second draw"}] = \textsf{Pr}[\textsf{"second draw"} \vert
     OO & $3/9$ & $2/8$ &  $ 3/9 \times 2/8 = 1/12$\\
     OR & $3/9$ & $5/8$ &  $ 3/9 \times 5/8 = 5/24$\\
     OB & $3/9$ & $1/8$ &  $ 3/9 \times 1/8 = 1/24$\\
-    BB & $1/9$ & $0/8$ &  $ 1/9 \times 0/8 = 0$\\
     BR & $1/9$ & $5/8$ &  $ 1/9 \times 5/8 = 5/72$\\
     BO & $1/9$ & $3/8$ &  $ 1/9 \times 3/8 = 1/24$\\
   \end{tabular}
@@ -331,13 +330,13 @@ To compute the expected value of $X$, i will use the general formula:
 \mathbf{E}[X] = \sum\limits_{x \in \mathbf{X}} x  Pr[\mathbf{X} = x]
 \label{expectation}
 \end{equation}
-We saw from question 3 that the possible outcomes for $X$ is 0,1 or 2, to get the probability of each value, each sample space satisfying one of the values are summed for the specific value.
+We saw from question 3 that the possible outcomes for $X$ is 0,1 or 2. To get the probability of each possible outcome, each sample space satisfying the values are summed, for the specific value.
 \begin{align*}
 Pr[X=0] &= \dfrac{5}{18} + \dfrac{5}{72} + \dfrac{5}{72} = \dfrac{5}{12} \\
 Pr[X=1] &= \dfrac{5}{24} + \dfrac{5}{24} + \dfrac{1}{24} + \dfrac{1}{24} = \dfrac{1}{2} \\
 Pr[X=2] &= \dfrac{1}{12} \\
 \end{align*}
-The numbers can now be used in equation \eqref{expectation}:
+The values can now be used in equation \eqref{expectation}:
 $$
 \mathbf{E}[X] = (0 \times \dfrac{5}{12}) + (1 \times \dfrac{1}{2}) + (2 \times \dfrac{1}{12}) = \dfrac{2}{3}
 $$

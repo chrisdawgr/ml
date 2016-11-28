@@ -389,7 +389,20 @@ Therefore as $\mathbf{E}[X] \times \mathbf{E}[Y] = \frac{1}{2} $ it is evident t
 
 
 \subsection{Question 4}
-Proof of $ \mathbf{E}[\mathbf{E}[X]] = \mathbf{E}[X] $
+Proof of $ \mathbf{E}[\mathbf{E}[X]] = \mathbf{E}[X] $ \\
+First we write out the inner expected value, thus:
+
+\begin{align*}
+\mathbf{E}[\mathbf{E}[X]] &= \mathbf{E} \left[ \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \right]
+\end{align*}
+The inner term no longer contains a random variable, thus the expected value is just the value, therefore
+\begin{align*}
+\mathbf{E} \left[ \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \right] &= \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \\ \\
+&=  \mathbf{E}[X]
+\end{align*}
+
+
+
 \subsection{Question 5}
 Proof of $\mathbf{E}\left[(X-\mathbf{E}[X])^2 \right] = 
 \mathbf{E}[X^2]-\left( \mathbf{E}[X] \right) ^2:

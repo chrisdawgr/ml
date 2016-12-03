@@ -132,7 +132,7 @@
 
 \title{
 \vspace{1in}
-\textmd{\textbf{Title}} \\
+\textmd{\textbf{Machine Learning - Assignment 2}} \\
 %\textmd{Assignment 2 - Resubmission} \\
 \author{Christoffer Thrysøe - dfv107}
 }
@@ -144,6 +144,7 @@
 % \tableofcontents
 \pagenumbering{arabic}
 \section{1. K-Nearest Neighbours}
+The function \texttt{main()}, found in the file \texttt{KNN.py} can be run to reproduce the results for this assignment.
 \subsection{Question: 1.1}
 The implemented K-Nearest Neighbour method is located in the file \texttt{KNN.py}. The method works by calculating the euclidean distance for each input point, to the rest of the points in the data. These distances are then sorted in ascending order and the top $k$ distances are retrieved. Each of these points have a target value, which counts as votes toward a prediction. The target value with the most votes is returned as the predictive class.
 \\
@@ -335,6 +336,7 @@ Pr \left[ \sum\limits^{n}_{i=1}X_i \geq 100 \right] \leq e^{-2 \times 100 \times
 \subsection{2}
 %https://people.cs.umass.edu/~domke/courses/sml2010/10theory.pdf
 \section{5}
+The function \texttt{main()}, found in the file \texttt{linregs.py} can be run to reproduce the results for this assignment.
 \subsection{Question 5.1}
 \subsubsection{1}
 The implemented linear regression algorithm can be found in the file \texttt{linregs.py}. \\
@@ -356,7 +358,7 @@ The below figure shows the data points and the linear model as a function of x.
   \label{fig:boat1}
 \end{figure}
 \subsection{Question 5.2}
-Proof that $\mathbf{H} = \mathbf{H}^T $, where $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T$. A rule used throughout the proof regards the transpose of multiple values and it goes as followed: $ (\mathbf{A} \mathbf{B})^T = \mathbf{B} ^T \mathbf{A}^T $ , i will refer to this rule as the \textit{transpose rule}. Another rule, which i will refer to as the inverse rule goes as followed: $ (\mathbf{A}^{T})^{-1} = (\mathbf{A}^{-1})^{T} $
+Proof that $\mathbf{H} = \mathbf{H}^T $, where $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T$. A rule used throughout the proof regards the transpose of multiple values and it goes as followed: $ (\mathbf{A} \mathbf{B} \mathbf{C})^T = \mathbf{C}^T \mathbf{B} ^T \mathbf{A}^T  $ , i will refer to this rule as the \textit{transpose rule}. Another rule, which i will refer to as the inverse rule goes as followed: $ (\mathbf{A}^{T})^{-1} = (\mathbf{A}^{-1})^{T} $
 \begin{align*}
 \mathbf{H} &= \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T \\
 \mathbf{H}^T &= \left[\mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T \right]^T  \hspace{0.5cm} \textsl{Apply transpose rule to the three inner terms} \\
@@ -378,8 +380,5 @@ To prove that $\mathbf{H}^k = \mathbf{H}$ i will prove that the matrix is idempo
 where step (4) of the proof uses the property that 
 $  (\mathbf{X}^T\mathbf{X})(\mathbf{X}^T\mathbf{X})^{-1} = \mathbf{I} $ \\
 Thus concluding the proof of $\mathbf{H} \times \mathbf{H} = \mathbf{H}$, note that this also imply that $\mathbf{H}^k = \mathbf{H}$.
-
-
-
 
 \end{document}

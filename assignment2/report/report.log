@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  2 DEC 2016 23:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  3 DEC 2016 00:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -697,53 +697,60 @@ LaTeX Font Info:    Try loading font information for U+lasy on input line 143.
 (/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 148.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 147.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Try loading font information for U+bbm on input line 159.
+LaTeX Font Info:    Try loading font information for U+bbm on input line 160.
 
 (/usr/share/texlive/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-)
-<ass1.png, id=1, 578.16pt x 433.62pt>
-File: ass1.png Graphic file (type png)
- <use ass1.png>
-Package pdftex.def Info: ass1.png used on input line 188.
-(pdftex.def)             Requested size: 284.52756pt x 213.39536pt.
- [1
+) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 <./ass1.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 224--236
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] <ass1.png, id=19, 578.16pt
+ x 433.62pt>
+File: ass1.png Graphic file (type png)
+
+<use ass1.png>
+Package pdftex.def Info: ass1.png used on input line 189.
+(pdftex.def)             Requested size: 284.52756pt x 213.39536pt.
+ [2 <./ass1.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 225--237
 
  []
 
 <ass12.png, id=26, 578.16pt x 433.62pt>
 File: ass12.png Graphic file (type png)
  <use ass12.png>
-Package pdftex.def Info: ass12.png used on input line 242.
+Package pdftex.def Info: ass12.png used on input line 243.
 (pdftex.def)             Requested size: 284.52756pt x 213.39536pt.
- [3 <./ass12.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 260--261
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 261--262
+
+ []
+
+[4 <./ass12.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 288--290
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 287--289
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 23.10004pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
 
- []
-
-[4] [5] <ass5.png, id=42, 578.16pt x 433.62pt>
+[5] <ass5.png, id=42, 578.16pt x 433.62pt>
 File: ass5.png Graphic file (type png)
  <use ass5.png>
-Package pdftex.def Info: ass5.png used on input line 354.
+Package pdftex.def Info: ass5.png used on input line 356.
 (pdftex.def)             Requested size: 284.52756pt x 213.39536pt.
- [6 <./ass5.png>]
+ [6]
 
 AED: lastpage setting LastPage
-[7] (./report.aux)
+[7 <./ass5.png>] (./report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -776,7 +783,7 @@ f-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texlive/texmf-dist
 ts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/sym
 bols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.p
 fb>
-Output written on report.pdf (7 pages, 295238 bytes).
+Output written on report.pdf (7 pages, 297083 bytes).
 PDF statistics:
  117 PDF objects out of 1000 (max. 8388607)
  81 compressed objects within 1 object stream

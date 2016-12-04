@@ -306,25 +306,24 @@ Pr[S\geq 9] = \frac{10}{1024} + \frac{1}{1024} = \frac{11}{1024} \approx 0.0107
 \end{equation*}
 \subsection{4}
 The bounded probability using Markov's inequality is very loose compared to the bounded probability by Hoeffding's inequality. The bounded probability using Markov's inequality is about 50 times greater than the exact probability where the bounden probability by Hoeffding's inequality is about 13 times greater than the exact.
-\section{The effect of scale (range) and normalization of random variables in Hoeffding's inequality}
-Collorary 1.4 assumes $ X_1,...,X_n$ are independent, such that $Pr[X_i \in [0,1]] = 1$ and that $\mathbb{E}[X_i=\mu]$. Given the above, we can apply Theorem 1.2 , that is $\sum_{i=1}^n (b_i-a_i)^2 = \sum_{i=1}^n (1-0)^2 =
-\sum_{i=1}^n 1 = n $. We let $\epsilon' = n\epsilon$
-Therefore:
+\section{3. The effect of scale (range) and normalization of random variables in Hoeffding's inequality}
+Corollary 1.4 assumes $ X_1,...,X_n$ are independent, such that $Pr[X_i \in [0,1]] = 1$ and that $\mathbb{E}[X_i]=\mu$. Given the above, we can apply Theorem 1.2 , that is we can express the term as followed $\sum_{i=1}^n (b_i-a_i)^2 = \sum_{i=1}^n (1-0)^2 =
+\sum_{i=1}^n 1 = n $. We let $\epsilon' = n\epsilon$ in theorem 1.2 and make use of the above, therefore:
 \begin{equation*}
-Pr \left[ \sum\limits^n_{i=1} X_i-\mathbb{E} \left[\sum\limits^n_{i=1} X_i \right] \geq \epsilon'\right] \leq e^{ -2 \epsilon'^2 \sum_{i=1}^n(b_i-a_i)^2  }= e^{-2\epsilon'^2/n}
+Pr \left[ \sum\limits^n_{i=1} X_i-\mathbb{E} \left[\sum\limits^n_{i=1} X_i \right] \geq \epsilon'\right] \leq e^{ -2 \epsilon'^2 / \sum_{i=1}^n(b_i-a_i)^2  }= e^{-2\epsilon'^2/n}
 \end{equation*}
 Because of independence we can define:
-$\mathbb{E}[\sum_{i = 1}^{n}X_i]= \sum_{i = 1}^{n}\mathbb{E}[X_i] = \sum_{i = 1}^{n} \mu n $ putting the expected value into the inequality:
+$\mathbb{E}[\sum_{i = 1}^{n}X_i]= \sum_{i = 1}^{n}\mathbb{E}[X_i] = \sum_{i = 1}^{n} \mu = \mu n $ putting the expected value into the inequality:
 \begin{equation*}
 Pr \left[ \sum\limits^n_{i=1} X_i - \mu n  \geq \epsilon' \right] \leq e^{-2\epsilon'^2/n}
 \end{equation*}
-If we now replace $\epsilon'$ with $n\epsilon$:
+If we now replace $\epsilon'$ with $n\epsilon$, and multiply $\frac{1}{2}$ to get rid of $n$ in the inner term:
 \begin{equation*}
 Pr \left[ \sum\limits^n_{i=1} X_i - \mu n  \geq n\epsilon' \right] =
-Pr \left[ \sum\limits^n_{i=1} X_i - \mu  \geq \epsilon' \right] 
+Pr \left[ \dfrac{1}{n} \sum\limits^n_{i=1} X_i - \mu  \geq \epsilon \right] 
  \leq e^{-2 n \epsilon^2}
 \end{equation*}
-thus completing the proof
+thus completing the proof that corollary 1.4 follows from theorem 1.2 for random variables in the $[0,1]$ interval. 
 \section{4. Basic Statistics}
 \subsection{1}
 To bound the probability, i will use Hoeffding's inequality, as in question 3. First we note that for each passenger there is a $\mu = 1-0.05$ change of him/her not showing up. We also not that $n(\mu + \epsilon) = 100$ and $n=100$. As before we solve for $\epsilon$:

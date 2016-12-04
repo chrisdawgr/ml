@@ -30,7 +30,7 @@ def findKNN(x,feats,targets,k):
     classifiercount[votetarget] = classifiercount.get(votetarget,0)+1
   sortedclassifiercount = max(classifiercount.iteritems(),
     key=operator.itemgetter(1))[0]
-  return sortedclassifiercount#[0][0]
+  return sortedclassifiercount
 
 # Calculate the euclidean distance between two vectors
 def getDistanceTwoPoints(x,xi):
@@ -70,6 +70,7 @@ def split(Data,splits):
   np.take(Data,np.random.permutation(Data.shape[0]),axis=0,out=Data)
   return np.split(Data,splits)
 
+# perform cross validation
 def crossValidate(filename,splits,flag):
   kvals = [x for x in range(26) if x&1 != 0]
   missAvgList = []
@@ -175,6 +176,5 @@ def main():
   print "Variance of training data " + str(varTrain)
   print "Mean of test data " + str(meanTest)
   print "variance of test data " + str(varTest)
-
 
 main()

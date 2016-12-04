@@ -146,9 +146,9 @@
 \section{1. K-Nearest Neighbours}
 The function \texttt{main()}, found in the file \texttt{KNN.py} can be run to reproduce the results for this assignment.
 \subsection{Question: 1.1}
-The implemented K-Nearest Neighbour method is located in the file \texttt{KNN.py}. The method works by calculating the euclidean distance for each input point, to the rest of the points in the data. These distances are then sorted in ascending order and the top $k$ distances are retrieved. Each of these points have a target value, which counts as votes toward a prediction. The target value with the most votes is returned as the predictive class.
+The implemented K-Nearest Neighbour method is located in the file \texttt{KNN.py}. The method works by calculating the euclidean distance, for each input point, to the rest of the points in the data. These distances are then sorted in ascending order and the top $k$ distances are retrieved. Each of these points have a target value, which counts as votes toward a prediction. The target value with the most votes is returned as the predictive class.
 \\
-To measure the performance of the classifier, the zero-one loss function is used, resulting in 0 if the target value $Y'$ is equal to the label value $Y$ and 1 otherwise:
+To measure the performance of the classifier, the zero-one loss function is used, resulting in 0 if the predicted value $Y'$ is equal to the true target value $Y$ and 1 otherwise:
 \begin{equation*}
 \begin{split}
 \ell(Y',Y) =
@@ -160,14 +160,13 @@ To measure the performance of the classifier, the zero-one loss function is used
 \end{split}
 \label{indikator}
 \end{equation*}
-The loss will calculated in respect to the amount of prediction made $N$, that is the average loss. The empirical loss is defined as followed:
+The loss will be calculated in respect to the amount of prediction made $N$, that is the average loss. The empirical loss is defined as followed:
 \begin{equation*}
 \hat{L}(h) =  \dfrac{1}{N}\sum\limits^{N}_{n=1} \ell (h(x_n),y_n)
 \end{equation*}
-The implemented method applied to both the training data \texttt{IrisTrainML.dt} and the testing data: \texttt{IrisTestML.dt}, each with values of $k \in \lbrace 1,3,5 \rbrace$.
-The experiments have been run separately for the test set and the training set.
+The implemented method is applied to both the training data \texttt{IrisTrainML.dt} and the testing data: \texttt{IrisTestML.dt}, each with values of $k \in \lbrace 1,3,5 \rbrace$.
 \\
-The below table shows the results of running aforementioned experiments.
+The below table shows the results of running the aforementioned experiments.
 \begin{table}[H]
   \centering
   \label{tab:table1}
@@ -180,9 +179,9 @@ The below table shows the results of running aforementioned experiments.
   \end{tabular}
   \caption{Empirical loss when running the KNN classifier on the testing and training set for different values of k} 
 \end{table}
-Note from above that the empirical loss of $k=1$ on the training data, is always zero as the closest neighbour of a given point is always the point itself. The test data is treated as unknown values in the training set, therefore the empirical loss of $k=1$ is not 0 as the entry doesn't exist in the data set.
+Note from above that the empirical loss of $k=1$ on the training data, is always zero as the closest neighbour of a given point is always the point itself. The test data is treated as unknown values in the training set, therefore the empirical loss of $k=1$ is not 0, as the entry doesn't exist in the data set.
 \subsection{Question 1.2}
-Cross validation is used for the K-Nearest Neighbour algorithm, in order to find the best suited value of $k$. The applied validation is a \textit{5-fold cross validation}, which means that the dataset is split into 5 equal sized partitions, where for a fixed k, one of these partitions are used as a validation set. This is performed for each fold thus 5 times. The average loss of these five folds are used to estimate the performance of the classifier. These folds are performed for $k \in \lbrace 1,3,5,...,25 \rbrace$ in order to find the value $k$, which results in the lowest average loss, this choosing of $k$ will be denoted as $k_{best}$.  
+Cross validation is used for the K-Nearest Neighbour algorithm, in order to find the best suited value of $k$. The applied validation is a \textit{5-fold cross validation}, which means that the dataset is split into 5 equal sized partitions, where for a fixed k, one of these partitions is used as a validation set. This is performed for each fold, thus 5 times. The average loss of these five folds is used to estimate the performance of the classifier. These folds are performed for $k \in \lbrace 1,3,5,...,25 \rbrace$ in order to find the value $k$, which results in the lowest average loss, this choosing of $k$ will be denoted as $k_{best}$.  
 The 5-fold validation is implemented in the function called \texttt{crossValidate} located in the file \texttt{KNN.py}. The method works by creating a random permutation of the input data, this permutation is then split into 5 equally sized partitions. The validation algorithm is then run for each value of $k$ and each partition.
 \begin{figure}[H]
   \centering
@@ -193,7 +192,6 @@ The 5-fold validation is implemented in the function called \texttt{crossValidat
 The value of k with the lowest 0-1 error is $k = 3 = k_{best}$
 The generalization performance of $k_{best}$ is found evaluating the 3-KNN classifier on the test data. The general performance of 3-KNN is $0.18$.
 \\ The result of the cross validation was somewhat surprising as i would have thought that the larger the k, the bigger the loss. However as evident in figure \ref{fig:cross1} there is no direct connection between the size of $k$ and the loss. Also when running the cross validation multiple times, with different random partitions, the value of $k_{best}$ would change, although $k=3$, usually provides a low loss. The below is the loss from running the classifier on the training and testing data sets, with $k = k_{best} = 3$:
-%TODO results here for kbest
 \begin{table}[H]
   \centering
   \label{tab:table1}
@@ -256,6 +254,10 @@ The above results suggests a $k_{best} = 1 \textsl{ or } 11$, as in the cross va
   \end{tabular}
   \caption{Empirical loss when running the KNN classifier on the testing and training set for different values of k} 
 \end{table}
+This feature normalization is performed to ensure that each feature counts equally. Features are measured on different scales, for example some features may range big values while others small. To ensure that features count equally they are scaled to lie in the same range. This is essential when dependent on difference metrics as non-normalized data can create a huge bias toward one feature. I believe the improved results of the cross validation, performed on normalized data, is due to the normalization of the data, and the removal of potential bias in the data.
+
+
+%TODO comment why result differ
 \section{2 Markov's inequality vs. Hoeffding's inequality vs. binomial bound}
 \subsection{1}
 To bound the probability using markov's inequality, the expected value of $S$ is determined:\\
@@ -278,12 +280,12 @@ Pr[S \geq 9] \leq \dfrac{\mathbb{E}[S]}{9} = \dfrac{5}{9} \approx 0.55
 Given the independence of the variables and that $ \mathbb{E}[X_i] = \mu $
 Hoeffding's inequality can be defined as:
 \begin{equation*}
-Pr\left[ [ \dfrac{1}{n} \sum\limits^{n}_{i=1}X_i - \mu \geq \epsilon \right]
+Pr\left[ \dfrac{1}{n} \sum\limits^{n}_{i=1}X_i - \mu \geq \epsilon \right]
 \leq e^{-2n\epsilon^2}
 \end{equation*}
 which can be rewritten as:
 \begin{equation*}
-Pr\left[ [ \dfrac{1}{n} \sum\limits^{n}_{i=1}X_i \geq n(\mu + \epsilon) \right]
+Pr\left[ \dfrac{1}{n} \sum\limits^{n}_{i=1}X_i \geq n(\mu + \epsilon) \right]
 \leq e^{-2n\epsilon^2}
 \end{equation*}
 noting that, $n=10$, $\mu= \dfrac{1}{2}$ solving for $\epsilon$ in\\
@@ -343,12 +345,12 @@ The implemented linear regression algorithm can be found in the file \texttt{lin
 First the data is loaded from the file \texttt{DanWood.dt}, the data is then prepared, that is split into x and y values. The intercept is added for the $\mathbf{X}$, setting $x_0$ to 1. The weights $w$ are then calculated as  $w = (\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T y$. The predictions $\hat{y}$ are estimated as $ \hat{y} = \mathbf{X}w$.
 \subsubsection{2}
 The linear model for the given data is as followed: 
-$$ \hat{y} = 9.48934569 \times x - 10.42696146 $$
-thus the weights are: $w=[-10.42696146,9.48934569]$ \\ The mean squared error is defined as:
+$$ \hat{y} = 9.489 \times x - 10.426 $$
+thus the weights are: $w=[-10.426,9.489]$ \\ The mean squared error is defined as:
 \begin{equation*}
 RMSE = \sqrt{ \dfrac{1}{N} \sum\limits^{n}_{i=1} (y_i - \hat{y}_i )^2}
 \end{equation*}
-The RMSE of the linear model performed on the data is $0.01243422$
+The RMSE of the linear model performed on the data is $0.0124$
 \subsubsection{3}
 The below figure shows the data points and the linear model as a function of x.
 \begin{figure}[H]

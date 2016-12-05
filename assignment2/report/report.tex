@@ -155,7 +155,7 @@ To measure the performance of the classifier, the zero-one loss function is used
 \mathbbm{1} \lbrace Y'= Y \rbrace =
 \begin{cases}
 0,& \textsl{if } Y' = Y  \\
-0,&  \textsl{otherwise}
+1,&  \textsl{otherwise}
 \end{cases}
 \end{split}
 \label{indikator}
@@ -179,7 +179,7 @@ The below table shows the results of running the aforementioned experiments.
   \end{tabular}
   \caption{Empirical loss when running the KNN classifier on the testing and training set for different values of k} 
 \end{table}
-Note from above that the empirical loss of $k=1$ on the training data, is always zero as the closest neighbour of a given point is always the point itself. The test data is treated as unknown values in the training set, therefore the empirical loss of $k=1$ is not 0, as the entry doesn't exist in the data set.
+Note from table \ref{tab:table1} that the empirical loss of $k=1$ on the training data, is always zero as the closest neighbour of a given point is always the point itself. The test data is treated as unknown values in the training set, therefore the empirical loss of $k=1$ is not 0, as the entry doesn't exist in the data set.
 \subsection{Question 1.2}
 Cross validation is used for the K-Nearest Neighbour algorithm, in order to find the best suited value of $k$. The applied validation is a \textit{5-fold cross validation}, which means that the dataset is split into 5 equal sized partitions, where for a fixed k, one of these partitions is used as a validation set. This is performed for each fold, thus 5 times. The average loss of these five folds is used to estimate the performance of the classifier. These folds are performed for $k \in \lbrace 1,3,5,...,25 \rbrace$ in order to find the value $k$, which results in the lowest average loss, this choosing of $k$ will be denoted as $k_{best}$.  
 The 5-fold validation is implemented in the function called \texttt{crossValidate} located in the file \texttt{KNN.py}. The method works by creating a random permutation of the input data, this permutation is then split into 5 equally sized partitions. The validation algorithm is then run for each value of $k$ and each partition.
@@ -191,10 +191,10 @@ The 5-fold validation is implemented in the function called \texttt{crossValidat
 \end{figure}
 The value of k with the lowest 0-1 error is $k = 3 = k_{best}$
 The generalization performance of $k_{best}$ is found evaluating the 3-KNN classifier on the test data. The general performance of 3-KNN is $0.18$.
-\\ The result of the cross validation was somewhat surprising as i would have thought that the larger the k, the bigger the loss. However as evident in figure \ref{fig:cross1} there is no direct connection between the size of $k$ and the loss. Also when running the cross validation multiple times, with different random partitions, the value of $k_{best}$ would change, although $k=3$, usually provides a low loss. The below is the loss from running the classifier on the training and testing data sets, with $k = k_{best} = 3$:
+\\ The result of the cross validation was somewhat surprising as i would have thought that the larger the k, the bigger the loss. However as evident in figure \ref{fig:cross1} there is no direct connection between the size of $k$ and the loss. Also when running the cross validation multiple times, with different random partitions, the value of $k_{best}$ would change. $k=3$, has been chosen as $k_{best}$ as it more often than not, provides the lowest cost, when performing cross validation. Table \ref{tab:table2} shows the empirical loss from running the classifier on the training and testing data sets, with $k = k_{best} = 3$:
 \begin{table}[H]
   \centering
-  \label{tab:table1}
+  \label{tab:table2}
   \begin{tabular}{c||c|c}
     \textsf{k} & $\textsl{Test}$ & $\textsl{Train}$\\
     \hline
@@ -203,20 +203,20 @@ The generalization performance of $k_{best}$ is found evaluating the 3-KNN class
   \caption{Empirical loss when running the KNN classifier on the testing and training set with $k=3$} 
 \end{table}
 \subsection{Question 1.3}
-The objective of the normalization procedure is to generate zero-mean, unit variance input data, that is we apply a linear mapping from the input data to the normalized output data. Thus we wish to determine some  $t$:
+The objective of the normalization procedure is to perform a zero-mean, unit variance transformation on the input data. To do so, we apply a linear mapping from the input data to the normalized output data. Thus we wish to determine some  $t$:
 \begin{equation}
 X_{norm}=t(X)
 \end{equation}
 such that $\mu(X_{norm})=0$ and $Var(X_{norm})=1$ \\
-To achieve this, the mean of each input feature is found and subtracted. The mean is calculated as following
+To achieve this, the mean of each input feature is found and subtracted. The mean is calculated by:
 \begin{equation*}
 \mu(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}x_i
 \end{equation*}
- Next the variance is found of each feature. The variance is calculated as:
+ Next the variance is found of each feature. The variance is calculated by:
 \begin{equation*}
 Var(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}(x_i - \mu)^2
 \end{equation*}
-The standard deviation $\sigma$ is equal the square root of the variance and is used to normalize the data. The normalization can then be expressed as the following:
+The standard deviation $\sigma$ is equal to the square root of the variance and is used to normalize the data. The normalization can then be expressed as the following:
 \begin{equation}
 X_{norm} = \dfrac{X - \mu(X) }{\sigma}
 \label{norm}
@@ -224,7 +224,7 @@ X_{norm} = \dfrac{X - \mu(X) }{\sigma}
 Thus defining the linear mapping from $X$ to $X_{norm}$. Below is the mean and variance for the training data \texttt{IrisTrainML.dt} and the normalized test data \texttt{IrisTestML.dt}. The mean and variance of the training data is used to normalize the test data, using equation \eqref{norm} \\
 \begin{table}[H]
   \centering
-  \label{tab:table1}
+  \label{tab:table3}
   \begin{tabular}{c||c|c}
     \textsf{ } & \textsl{Training} & \textsl{$Test_{norm}$} \\
     \hline
@@ -235,17 +235,17 @@ Thus defining the linear mapping from $X$ to $X_{norm}$. Below is the mean and v
 \end{table}
 The variance and mean for the normalized test data is slightly larger than of the training data.
 \\
-Running the cross validation algorithm on normalized data gives the following results:
+Running the cross validation algorithm on normalized data yields the following results:
 \begin{figure}[H]
   \centering
   \includegraphics[width=10cm]{ass12.png}
   \caption{Average loss over 5 folds as a function of the values of k, found using the normalized data.}
-  \label{fig:boat1}
+  \label{fig:fig1}
 \end{figure}
-The above results suggests a $k_{best} = 1 \textsl{ or } 11$, as in the cross validation for non-normalized data the the result is very varying, however the empirical loss is lower when using normalized data.
+The above results suggests a $k_{best} = 1 \textsl{ or } 11$, as in the cross validation for non-normalized data the the result is contra distinctive. A clear difference from the results of running the cross validation on non-normalized data and on normalized data is that the normalized data produce a much smaller loss.
 \begin{table}[H]
   \centering
-  \label{tab:table1}
+  \label{tab:table4}
   \begin{tabular}{c||c|c}
     \textsf{k} & $\textsl{Test}$ & $\textsl{Train}$\\
     \hline
@@ -254,10 +254,7 @@ The above results suggests a $k_{best} = 1 \textsl{ or } 11$, as in the cross va
   \end{tabular}
   \caption{Empirical loss when running the KNN classifier on the testing and training set for different values of k} 
 \end{table}
-This feature normalization is performed to ensure that each feature counts equally. Features are measured on different scales, for example some features may range big values while others small. To ensure that features count equally they are scaled to lie in the same range. This is essential when dependent on difference metrics as non-normalized data can create a huge bias toward one feature. I believe the improved results of the cross validation, performed on normalized data, is due to the normalization of the data, and the removal of potential bias in the data.
-
-
-%TODO comment why result differ
+This feature normalization is performed to ensure that each feature counts equally. Features are measured on different scales, for example some features may range big values where others small. To ensure that features count equally they are scaled to lie in the same range. This is essential when dependent on distance metrics as non-normalized data can create a huge bias toward one feature. I believe the improved results of the cross validation, performed on normalized data, is due to the normalization of the data, and the removal of potential bias in the data.
 \section{2 Markov's inequality vs. Hoeffding's inequality vs. binomial bound}
 \subsection{1}
 To bound the probability using markov's inequality, the expected value of $S$ is determined:\\
@@ -326,7 +323,7 @@ Pr \left[ \dfrac{1}{n} \sum\limits^n_{i=1} X_i - \mu  \geq \epsilon \right]
 thus completing the proof that corollary 1.4 follows from theorem 1.2 for random variables in the $[0,1]$ interval. 
 \section{4. Basic Statistics}
 \subsection{1}
-To bound the probability, i will use Hoeffding's inequality, as in question 3. First we note that for each passenger there is a $\mu = 1-0.05$ change of him/her not showing up. We also not that $n(\mu + \epsilon) = 100$ and $n=100$. As before we solve for $\epsilon$:
+To bound the probability, i will use Hoeffding's inequality. First we note that for each passenger there is a $\mu = 1-0.05$ change of him/her not showing up. We also note that $n(\mu + \epsilon) = 100$ and $n=100$. As before we solve for $\epsilon$:
 $$ 
 100(\epsilon + \frac{95}{100}) = 100 \textsl{, yields: } \epsilon = \dfrac{1}{20}
 $$
@@ -337,7 +334,7 @@ Pr \left[ \sum\limits^{n}_{i=1}X_i \geq 100 \right] \leq e^{-2 \times 100 \times
 \subsection{2}
 %https://people.cs.umass.edu/~domke/courses/sml2010/10theory.pdf
 \section{5}
-The function \texttt{main()}, found in the file \texttt{linregs.py} can be run to reproduce the results for this assignment.
+The function \texttt{main()}, found in the file \texttt{linregs.py} can be run to produce the results for this assignment.
 \subsection{Question 5.1}
 \subsubsection{1}
 The implemented linear regression algorithm can be found in the file \texttt{linregs.py}. \\
@@ -356,7 +353,7 @@ The below figure shows the data points and the linear model as a function of x.
   \centering
   \includegraphics[width=10cm]{ass5.png}
   \caption{Data plotted as points, the linear regression model plotted as a line}
-  \label{fig:boat1}
+  \label{fig:fig2}
 \end{figure}
 \subsection{Question 5.2}
 Proof that $\mathbf{H} = \mathbf{H}^T $, where $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T$. A rule used throughout the proof regards the transpose of multiple values and it goes as followed: $ (\mathbf{A} \mathbf{B} \mathbf{C})^T = \mathbf{C}^T \mathbf{B} ^T \mathbf{A}^T  $ , i will refer to this rule as the \textit{transpose rule}. Another rule, which i will refer to as the inverse rule goes as followed: $ (\mathbf{A}^{T})^{-1} = (\mathbf{A}^{-1})^{T} $

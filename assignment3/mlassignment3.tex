@@ -72,7 +72,7 @@
 
 % Set up the header and footer
 \pagestyle{fancy}
-\lhead{Header} % Top left header
+\lhead{Machine Learning} % Top left header
 \chead{}
 \lfoot{\lastxmark} % Bottom left footer
 \cfoot{} % Bottom center footer
@@ -102,7 +102,7 @@
 % \tableofcontents
 \pagenumbering{arabic}
 \section{1. Summarization by the mean}
-If we consider a set $S = \lbrace \mathbf{x}_1,...,\mathbf{x}_N$, we want to prove that:
+If we consider a set $S = \lbrace \mathbf{x}_1,...,\mathbf{x}_N \lbrace $, we want to prove that:
 \begin{equation}
 \textsl{argmin}_{b \in \mathbb{R}^d} \dfrac{1}{N} \sum\limits_{i=1}^N ||\mathbf{x}_i-\mathbf{b}||^2
 \label{eq:eq1}
@@ -114,7 +114,7 @@ is given by the empirical mean:
 \end{equation}
 First we write out the inner term:
 \begin{equation*}
-||\mathbf{x_i}-\mathbf{b}||^2 = \sqrt{\mathbf{x}_i^2-\mathbf{b}^2} ^2 = \left(\mathbf{x}_i - \mathbf{b} \right)^2
+||\mathbf{x_i}-\mathbf{b}||^2 = \left( \sqrt{\mathbf{x}_i^2-\mathbf{b}^2} \right) ^2 = \left(\mathbf{x}_i - \mathbf{b} \right)^2
 \end{equation*}
 Since we want to find the value of $\mathbf{b}$ which minimizes equation \ref{eq:eq1}, we differentiate with respect to $\mathbf{b}$ and set the equation equal to zero:
 \begin{align*}
@@ -148,9 +148,82 @@ If we multiply $X_0^T$ from the left, and noting the definition of $\mathbf{S}$ 
 comparing equation \ref{eq:3} and \ref{eq:4} $\mathbf{X}_0^T \mathbf{v}$ is the eigenvector with eigenvalues $\lambda$, thus completing the proof.
 \section{3. The Traffic Sign Recognition Data}
 \subsection{3.1 Data understanding and preprocessing}
-The plotting function is located in the file \texttt{understanding.py}.The program works by splitting the dataset into features, i.e. pictures consisting of 1568 pixel values, and target values, i.e. traffic sign.
-%TODO input picture
+The plotting function is located in the file \texttt{understanding.py}.The program works by splitting the dataset into features, i.e. pictures consisting of 1568 pixel values, and target values, i.e. traffic sign. The number of each traffic sign class is then accumulated and divided by the total number of signs, resulting in the frequency of each traffic sign. Figure \ref{fig:hist} is a histogram showing the frequency of each class, i.e. traffic sign.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{hist.png}
+  \caption{Histogram showing the frequency of each traffic sign from the dataset \texttt{ML2016TrafficSignsTrain.csv}}
+  \label{fig:hist}
+\end{figure}
 \subsection{3.2. Principal component analysis}
-\subsection{3.3. Clustering}
+The implementation of the PCA algorithm is located in the file \texttt{PCA.py}. The algorithm performs the following steps:
+\begin{enumerate}
+\item{Separate features and target values of each traffic sign}
+\item{For each feature, calculate the mean and withdraw it from the data points}
+\item{Compute the covariance matrix of the mean-less data}
+\item{Compute eigenvalues and eigenvectors of the covariance matrix}
+\item{Sort the eigenvectors based on the corresponding eigenvalue from largest to smallest}
+\item{Take the top k (dimension to reduce to) eigenvectors. These correspond to the k principle components}
+\item{Project the data into k dimensions by multiplying the principle components and the mean-less data}
+\end{enumerate}
+\subsubsection{Eigenspectrum}
+To compute the eigenspectrum the eigenvalues have been listed in descending order, and plotted on a logarithmic scale as shown in figure \ref{fig:eig}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{eig.png}
+  \caption{Histogram showing the frequency of each traffic sign from the dataset \texttt{ML2016TrafficSignsTrain.csv}}
+  \label{fig:eig}
+\end{figure}
+The number of components necessary to explain 90 $\%$ of the data was determined to be 228 components. \\
+From \ref{fig:eig} it is evident that the variance drops quickly after a few components, then slowly decreases and for the last 200-300 components the variance plummets.
+\subsubsection{Projection onto two dimensions}
+The data has been projected down to two dimensions, by performing PCA with k = 2, that is multiplying the first two principle components onto the mean-less data. Figure \ref{fig:scatter} shows a scatter plot for the for the five different mappings from classes to shapes of the traffic signs.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{scatter.png}
+  \caption{Scatter plot of the data \texttt{ML2016TrafficSignsTrain.csv} projected onto the two first principal components. each data marker defines a traffic sign shape}
+  \label{fig:scatter}
+\end{figure}
+The below table shows the correlation between the shape of the traffic signs and the colour which they were plotted in. The shape of the marker corresponds to the shape of the traffic sign:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c||c}
+    \textsf{Shape} & \textsf{Color}\\
+    \hline
+    \textsl{Round} & \textsl{Red} \\
+    \textsl{Upwards pointing triangle} & \textsl{Green} \\
+    \textsl{Diamond} & \textsl{Blue} \\
+    \textsl{Downwards pointing triangle} & \textsl{Yellow} \\
+    \textsl{Octagon} & \textsl{Black} \\
+  \end{tabular}
+\end{table}
+From figure \ref{fig:scatter} we can see that the projection onto the two first principal components, describes the data well, as the data is somewhat divided into four clusters. Two classes are not well differentiated, using the two first components, namely the round and octagon shaped signs. This is probably as the round and octagon shapes are very similar, and therefore described similar by the two principal components.
 
+\subsection{3.3. Clustering}
+The implementation of k-means clustering is included in the file \texttt{kmeans.py}. The algorithm works as followed:
+\begin{enumerate}
+\item{$k$ cluster points are initialized, with a given position in the data. For this assignment the data is initialized to have the same position as the first four data points.}
+\item{For each data point in the input data, the point is assigned the cluster with the smallest euclidean distance.}
+\item{For each cluster, the mean of the assigned points are calculated
+and the cluster position is then updated with the mean.
+}
+\item{The two steps above are repeated until the clusters no longer move. The position of these clusters are then returned. (For this implementation the algorithm stops once the clusters doesn't move, although as the clusters may converge for infinity, this is bad practice, but i didn't experience this.}
+\end{enumerate}
+Figure \ref{fig:clust1} shows the cluster position projected onto the two first principle components, using the same projection calculation as assignment 3.2. The starting positions of the four clusters correspond to the first four data points. All clusters converged after 20 iterations.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{clust1.png}
+  \caption{The result of running 4-clustering on the dataset \texttt{ML2016TrafficSignsTrain.csv}, where the position of the clusters (green dots) have been projected onto the first two principle components.
+  }
+  \label{fig:clust1}
+\end{figure}
+I also tried to perform the clustering on random data points. Figure \ref{fig:clust2}, shows the result of doing so.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{clust2.png}
+  \caption{The result of running 4-clustering on the dataset \texttt{ML2016TrafficSignsTrain.csv}, with random starting points for the clusters.
+  }
+  \label{fig:clust2}
+\end{figure}
+In general i believe the clusters favoured the position corresponding to the rounded and upward triangle shaped traffic signs (red \& green). Also more often than not, a cluster is positioned on the downward triangle shape.  These observations could be the result that the shapes are represented by a lot of observations, thus influencing the mean greatly and thus dictating the cluster position, but also  that these shapes are well divided into clusters and could therefore easily be grouped, therefore I believe i got meaningful clusters.
 \end{document}

@@ -61,7 +61,7 @@
 \linespread{1.1} % Line spacing
 
 \pagestyle{fancy}
-\lhead{Set Header} % Top left header
+\lhead{Machine Learning - Assignment 5} % Top left header
 \chead{}
 \lfoot{\lastxmark} % Bottom left footer
 \cfoot{} % Bottom center footer
@@ -72,14 +72,124 @@
 \setcounter{secnumdepth}{0} % Removes default section numbers
 \title{
 \vspace{1in}
-\textmd{\textbf{Insert Title}} \\
+\textmd{\textbf{Machine Learning - Assignment 5}} \\
 \author{Christoffer Thrysøe - dfv107}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \maketitle
 \pagenumbering{arabic}
+\section{1. Neural Networks}
+The implementation for the neural network is located in the file \texttt{NN.py}, the network uses the following activation function for forward propagation:
+\begin{equation}
+h(a) = \dfrac{a}{1+|a|}
+\label{eq:activation}
+\end{equation}
+The derivative of \eqref{eq:activation} is defined as the following and is used for backward propagation:
+\begin{equation*}
+h(a) = \dfrac{1}{(1+|a|^2)}
+\end{equation*}
+The implementation uses a single hidden layer, and takes as input the number of hidden units at the layer.
+\subsection{Gradient verification}
+The gradient computation has been verified by calculating the numerically estimated partial derivatives using the following right hand side calculation, and verifying the proximity. 
+\begin{equation}
+\dfrac{\partial E (\mathbf{w})}{\partial [\mathbf{w}]_i} \approx
+\dfrac{E ( \mathbf{w} + \epsilon \mathbf{e_i}) - E ( \mathbf{w)}}{\epsilon}
+\label{eq:verification}
+\end{equation}
+The gradient verification has been implemented in the function \texttt{gradient\_verify}, the gradient has been compared using the first 10 data points of the file \texttt{sincTrain25.dt}, the gradients have been estimated performing a single backpropagation iteration. The result from \eqref{eq:verification} has been confirmed to be less than $ 10^{-8}$, when setting $\epsilon = 0.00000001$.
+\subsection{Neural network training}
+The neural network has been trained using the training data \texttt{sincTrain25.dt}. Batch gradient learning has been applied training the model, when using backpropagation. Besides training the data, the resulting weights of the backpropagation procedure is used for evaluating the validation error, which is done by performing a forward propagation using the validation data from the set \texttt{sincValidate10.dt} and the weights of the network. A network with 2 and 20 hidden units have been tested, each with a learning rate of $0.001,0.01,0.1$.
+Figure \ref{fig:twoplots} shows the error measure (mean squared error) plotted using two hidden units with a learning rate of $0.1$ over 1400 iterations.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=20cm]{fig/testval2.png}
+  \caption{MSE for the neural network trained and performed on the training data, and performed on the validation data.}
+  \label{fig:twoplots}
+\end{figure}
+As evident from figure \ref{fig:twoplots} the validation error converges nicely in a decreasing manner, this is good as it indicates a better generalization of the data. The stopping criteria for the model is simply when all iterations have been performed. This could have been changed to early stopping by identifying when the validation error stops decreasing/starts increasing over a number of iterations. However as no apparent over fitting is present this was not implemented. It should be emphasized here that this was only the case when performing the mentioned experiments, when specifying a larger learning rate for 20 hidden units at some point the validation error will start to rise and fluctuate, which is an indication of over-fitting the data. This is shown in figure \ref{fig:shit}. This over-fitting could be dealt with by implementing early stopping. A concern regarding early stopping was when to stop the iterations as the error function decreases twice over the iterations, which may be the result of the gradient decent procedure being located in a local minima, and we want to wait for the procedure to locate the global minima, which is not possible if the early stopping procedure forces a stop at a local minima.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=20cm]{fig/shit.png}
+  \caption{Over-fitting of the data, when using 20 hidden units. The over-fitting should be avoided using early-stopping}
+  \label{fig:mulplots}
+\end{figure}
+
+Figure \ref{fig:mulplots} shows different learning rates with 2 hidden units, figure \ref{fig:mulplots1} shows the same with 20 hidden units.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=20cm]{fig/plot2.png}
+  \caption{MSE for different learning rates using 2 hidden units}
+  \label{fig:mulplots}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=20cm]{fig/plot20.png}
+  \caption{MSE for different learning rates using 20 hidden units}
+  \label{fig:mulplots1}
+\end{figure}
+Figure \ref{fig:overfit} shows a plot of the network functions, with different learning rates, the learning rate of 2.1 has been introduced to visualize what happens with big learning rates. The underlying function which the toy data was generated upon is also plotted. Generally we want to produce a model which captures the underlying structure of the data, thus the model which fits the function the best. Clearly Small and large learning rates do not produce a well generalization. Choosing a low learning causes the function to capture close to nothing of the structure of the data, thus under fitting the data. A large learning rate captures the data nicely to start with, however it diverges away from the data at the end. This is probably caused by the gradient being stuck at a local minima which it is not able to escape from due to the high learning error.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=20cm]{fig/overfit2.png}
+  \caption{Different network functions plotted amongst the training data and the validation data. The function from which the data was generated is also visualized.}
+  \label{fig:overfit}
+\end{figure}
+\section{2. The growth function}
+\begin{enumerate}
+\item{
+We have that $|\mathcal{H}| = M$, the number of all possible dichotomies is $2^N$ given a set of size $N$. If $M \leq 2^N$ then $M$ bounds the growth function as $M$ hypothesis can generate at most $M$ dichotomies, as each hypothesis can generate at most one unique dichotomy, therefore $m_{\mathcal{H}}(N) \leq M$. \\
+If $M \geq 2^N $ then the number of hypothesis is larger than the number of possible dichotomies. If the hypothesis shatters the sample set, then there are $2^N$ dichotomies, as some hypotheses generate identical dichotomies, therefore  $m_{\mathcal{H}}(N) \leq 2^N$. Which gives the following bound:
+\begin{equation}
+m_{\mathcal{H}}(N) \leq \textsl{min } \lbrace M,2^N \rbrace
+\end{equation}
+thus concluding the proof. \\
+The VC-dimension of $\mathcal{H}$ is the largest sample size for which the data is shattered by M hypothesis. We wish to provide an upper bound on the dimension as we do not know the break point (if any) of the data. Thus we take the largest number of sample size which can be shattered by M hypotheses. We get the following bound:
+\begin{equation}
+d_{VC} \leq lg(M)
+\end{equation}
+}
+\item{
+}
+\item{ }
+\item{
+Rewriting the following theorem:
+\begin{equation}
+m_\mathcal{H}(N) \leq \sum \limits_{i=0}^{k-1}\binom{N}{i} 
+\end{equation}
+in terms of the VC dimension, and applying the inequality yields the following:
+\begin{equation}
+m_\mathcal{H}(N) \leq \sum \limits_{i=0}^{d}\binom{N}{i} \leq N^{d_{VC}}+1 
+\label{eq:herdu}
+\end{equation}
+}
+\item{
+Using the VC generalization bound:
+\begin{equation}
+Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S+
+\sqrt{\dfrac{8}{N} ln \dfrac{4m_\mathcal{h}(2N)}{\delta}} \right] \geq 1 - \delta 
+\end{equation}
+we can substitute the result from \eqref{eq:herdu} into the bound which yields the following bound: 
+\begin{equation}
+Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S+
+\sqrt{\dfrac{8}{N} ln \dfrac{8N^{d_{VC}+4}}{\delta}} \right] \geq 1 - \delta 
+\end{equation}
+}
+\end{enumerate}
+\section{3. VC-dimension}
+\begin{enumerate}
+
+\item{
+It's easy to identify that that the VC-dimension is at least five as 3 points which can be shattered, by $\mathcal{H_+}$. It is however not possible to shatter a set of for points using $\mathcal{H_+}$ to see this, we consider two cases. 1) When all four point form a quadrilateral convex hull, choosing furthest diagonal points as positive and the closest as negative is a dichotomy which can never be realised. 2) The convex hull is a triangle, thus one of the points is inside the triangle. Classifying the inner point as negative an the outer as positive is a dichotomy which can never be realised. Thus arguing that $d_{VC}(\mathcal{H}_+) = 3$ 
+}
+\item{
+With the new hypothesis set: $\mathcal{H} = \mathcal{H}_+ \cup \mathcal{H}_-$ dichtomies can now be generated from assignment 1, thus we focus on the sample size of 5, again the reasoning is made regarding convex hulls, the following scenarios are:
+1) The convex case, the same arguments follows from question 1 and is therefore not allowed. 2) When either 1 or 2 points lie within the convex hull, the same argument follows from question 1 and is therefore not allowed. Thus arguing that $d_{VC}(\mathcal{H}) = 4$ 
+}
+
+\end{enumerate}
 
 
 
 \end{document}
+

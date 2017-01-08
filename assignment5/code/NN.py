@@ -30,6 +30,7 @@ Calculates the linear model target value based on the given weights and bias.
 Used for hidden units, when firing towards the output unit
 """
 def calc_output(hidden_data, weight, bias):
+  #print hidden_data + [bias]
   return dot(weight, hidden_data + [bias])
 
 """
@@ -65,6 +66,8 @@ def feedForward(data, weights_m, weights_k, num_input=1,\
     for h_unit in xrange(num_hidden):
       # call activation function, with weights for hidden neurons
       hidden_data.append(calc_hidden(x, weights_m[h_unit],1))
+      #print weights_m
+      print weights_k
     # get output using the weights from the output neurons
     prediction.append(calc_output(hidden_data, weights_k, 1))
   return prediction
@@ -101,7 +104,9 @@ def backPropagation(learning_rate,weights_m,weights_k,verify=False,steps=4000):
     target = target[:10]
   errors     = []; val_errors = []
   p = 1
+  steps = 1
   for _ in xrange(steps):
+
     if p % steps == 0:
       sys.stdout.write('\r'+"")
       sys.stdout.flush()
@@ -160,7 +165,7 @@ def gradient_verify(weights_k, weights_m, e=0.00000001):
   return error_matrix_md, error_matrix_km
 
 def main(iterations):
-  test    = [(2, [0.001, 0.01,0.1]),(20, [0.001, 0.01,0.1])]
+  test    = [(2, [0.1])]
   twoPlot = []
   global num_hidden
   for num_hidden, learning_rates in test:
@@ -169,10 +174,10 @@ def main(iterations):
     weights_m   = sample([num_hidden, 2])
     # weights from hidden to output
     weights_k   = sample([1, num_hidden + 1])
-    error_matrix_md, error_matrix_km = gradient_verify(weights_k, weights_m)
+    #error_matrix_md, error_matrix_km = gradient_verify(weights_k, weights_m)
 
-    _, _, _, avg_dhidden, avg_dout = backPropagation(-1, weights_m,\
-                                                     weights_k,True,1)
+    #_, _, _, avg_dhidden, avg_dout = backPropagation(-1, weights_m,\
+    #                                                 weights_k,True,1)
     # gradient verification, values should be within 10^-8
     #print subtract(error_matrix_md, avg_dhidden)
     #print subtract(error_matrix_km, avg_dout)
@@ -189,6 +194,7 @@ def main(iterations):
       if learning_rate == 0.1:
         twoPlot.append(errors)
 
+    """
     plt.gca().set_yscale('log')
     # Plot of all learning rates and validation errors
     for index, err in enumerate(errors_list):
@@ -239,8 +245,5 @@ def main(iterations):
   title = "img/twoplots"+str(num_hidden)+str("-")+str(learning_rates)+str(".png")
   plt.savefig(title)
   plt.close()
-
-
-
-if __name__ == '__main__':
-  main(4000)
+  """
+main(1)

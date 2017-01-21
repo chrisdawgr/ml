@@ -130,10 +130,23 @@ on the target values of the k-nearest neighbours, but the mean of their target v
 where $y$ denotes the target value associated with the independent variable $x$. \\
 For hyper parameter tuning, i.e. finding the optimal value of $k$, i have used a 5-fold cross-validation. The training set of 5000 samples is split into 5 equally sized partitions, each of these partitions is by turn used as a validation set and the rest as a training set. The k-nearest neighbour algorithm is applied to each of the partitions, and the average MSE error over these folds determines the average error for the given value k. The k with the lowest average error is used as the parameter of the k-nearest neighbour algorithm.
 \\
-There was a number of reasons for choosing algorithm, ultimately the choice was between k-nearest-neighbours and neural networks. Both algorithms was considered as they usually make good generalizations on data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data, which addresses a certain algorithm is hard, due to the dimensionality. I tested my neural two-layer hidden network implementation and the result was sub par compared to the performance of  the k-nearest neighbour. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in certain features contributing more to the overall estimation. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data.
+There was a number of reasons for choosing algorithm, ultimately the choice was between k-nearest-neighbours and neural networks. Both algorithms was considered as they usually make good generalizations on data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data, which addresses a certain algorithm is hard, due to the dimensionality. I tested my neural two-layer hidden network implementation and the result was sub par compared to the performance of  the k-nearest neighbour. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in certain features contributing more to the overall estimation. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
+The cross validation has been performed for the following values of k:
+$$ k \in \left[ 1,3,5,7,9,11,13,15,17,19,21,23,25 \right] $$
+The average error over the five folds is illustrated in figure 
 
-
-
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=17cm]{fig/1.png}
+  \caption{}
+  \label{fig:mulplots}
+\end{figure}
+The smallest MSE came from the parameter $k=9$, therefore 9 is the hyperparameter chosen. The following shows the result of running the 9-nearest-neighbour algorithm on the training and testing data. When applying k-nearest neighbour on the training data, the closest neighbour will always be itself, this is not the case for the test data, as the points are introduced to a dataset where they don't exists. The results are the following:
+\begin{align*}
+\text{MSE}_{\text{training}} &=  0.000465310841171 \\
+\text{MSE}_{\text{test}} &=  0.000588914605838
+\end{align*}
+The above results both show an MSE, which is far lower than the liner regression model. Thus the non-linear 9-nearest-neighbour has a better performance %TODO ..
 \section{2. Weed}
 \subsection{Question 2.1}
 

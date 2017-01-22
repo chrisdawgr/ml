@@ -81,7 +81,7 @@
 \pagenumbering{arabic}
 \section{1. In a galaxy far, far away}
 \subsection{Question 1.1}
-The variance $\sigma^ 2_{\text{red}}$ of the redshifts detailed in the training data, was calculated using the following:
+The variance $\sigma^ 2_{\text{red}}$ of the redshifts, detailed in the training data, was calculated using the following:
 \begin{equation}
 \sigma^2_{\text{red}} = \dfrac{1}{N} \sum\limits_{i=0}^N(X_i-\mu)^2
 \end{equation}
@@ -100,29 +100,29 @@ The mean-squared-error (MSE) is defined as the following:
 where $\hat{y}$ denotes the estimated value of the actual target value $y$. 
 MSE has been applied on the SDSS predictions on the test data and the actual values. The returned MSE was the following:
 $$
-MSE = 0.000812319455494
+\text{MSE} = 0.000812319455494
 $$
 \subsection{Question 1.2}
-Linear regression was performed by applying least squares, however the results were very unsatisfying, probably due to the linear dependency in the data. Therefore i have used the weights described in the announcement on Absalon. From these weights i have estimated the target value $\hat{Y}$ using the following:
+Linear regression was performed by applying least squares, however the results were very unsatisfying, probably due to the linear dependency in the data. Therefore i have used the weights described in the announcement on Absalon. From these weights i have estimated the target value $\hat{y}$ using the following:
 \begin{equation}
-\hat{Y_i} = wx_i+w_0
+\hat{y_i} = wx_i+w_0
 \end{equation}
 The MSE on the training and test data is defined below:
 \begin{align*}
-\text{MSE}_{\text{training}} &=  0.0018621 \\
+\text{MSE}_{\text{train}} &=  0.0018621 \\
 \text{MSE}_{\text{test}} &= 0.00186407
 \end{align*}
 Normalizing the error w.r.t the variance yields the following result:
 
 \begin{align}
-\dfrac{\text{MSE}_{\text{training}}}{\sigma^2_{\text{red}}} =
+\dfrac{\text{MSE}_{\text{train}}}{\sigma^2_{\text{red}}} =
 \dfrac{0.0018621}{0.0106043856253} = 0.17559716006
 \label{eq:3}
 \end{align}
 As the least-squared estimator is unbiased, the mean-squared error is the variance of our linear estimator. By comparing the mean-squared-error, and the variance of the data we can see to what extend the estimator captures the variance of the data. For example if the variance of the data is high and the mean-squared-error is small compared, then the estimator has over-fitted the data. Equation \eqref{eq:3} will then be less than 1. If on the other hand the mean-squared-error is very large compared to the variance, then the estimator has under fitted the data. In this case equation \eqref{eq:3} will be greater than 1.
 \subsection{Question 1.3}
-For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous assignment, however for regression instead of classification instead. The process of obtaining the k-nearest neighbours of a sample is the same, the euclidean distance from each point in question is taken to the rest of the points, the top k points with the lowest distance are marked as neighbours.The regression variant doesn't use a voting phase 
-on the target values of the k-nearest neighbours, but the mean of their target values instead as shown in equation \eqref{eq:knn}.
+For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous assignment, however for regression instead of classification. The process of obtaining the k-nearest neighbours of a sample is the same, the euclidean distance from each point in question is taken to the rest of the points, the top k points with the lowest distance are marked as neighbours.The regression variant doesn't use a voting phase 
+on the target-values of the k-nearest neighbours, but the mean of their target-values instead as shown in equation \eqref{eq:knn}.
 \begin{equation}
 \hat{y} =  \dfrac{1}{K} \sum\limits_{i=0}^K y(x_i)
 \label{eq:knn}
@@ -130,18 +130,17 @@ on the target values of the k-nearest neighbours, but the mean of their target v
 where $y$ denotes the target value associated with the independent variable $x$. \\
 For hyper parameter tuning, i.e. finding the optimal value of $k$, i have used a 5-fold cross-validation. The training set of 5000 samples is split into 5 equally sized partitions, each of these partitions is by turn used as a validation set and the rest as a training set. The k-nearest neighbour algorithm is applied to each of the partitions, and the average MSE error over these folds determines the average error for the given value k. The k with the lowest average error is used as the parameter of the k-nearest neighbour algorithm.
 \\
-There was a number of reasons for choosing algorithm, ultimately the choice was between k-nearest-neighbours and neural networks. Both algorithms was considered as they usually make good generalizations on data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data, which addresses a certain algorithm is hard, due to the dimensionality. I tested my neural two-layer hidden network implementation and the result was sub par compared to the performance of  the k-nearest neighbour. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in certain features contributing more to the overall estimation. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
+There was a number of reasons for choosing this algorithm. Ultimately the choice was between k-nearest-neighbours and neural networks. Both algorithms was considered as they usually make good generalizations on data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data can be tedious due to the dimensionality. I tested my neural two-layer hidden network implementation and the result was sub par compared to the performance of  the k-nearest neighbour. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in certain features contributing more to the overall estimation. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
 The cross validation has been performed for the following values of k:
 $$ k \in \left[ 1,3,5,7,9,11,13,15,17,19,21,23,25 \right] $$
-The average error over the five folds is illustrated in figure 
-
+The average error over the five folds is illustrated in figure \ref{fig:mulplots}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=17cm]{fig/1.png}
   \caption{}
   \label{fig:mulplots}
 \end{figure}
-The smallest MSE came from the parameter $k=9$, therefore 9 is the hyperparameter chosen. The following shows the result of running the 9-nearest-neighbour algorithm on the training and testing data. When applying k-nearest neighbour on the training data, the closest neighbour will always be itself, this is not the case for the test data, as the points are introduced to a dataset where they don't exists. The results are the following:
+The smallest MSE was achieved using the parameter $k=9$, therefore 9 is the hyper parameter chosen. The following shows the result of running the 9-nearest-neighbour algorithm on the training and testing data. When applying k-nearest neighbour on the training data, the closest neighbour will always be itself, this is not the case for the test data, as the points are introduced to a dataset where they don't exists. The results are the following:
 \begin{align*}
 \text{MSE}_{\text{train}} &=  0.000465310841171 \\
 \text{MSE}_{\text{test}} &=  0.000588914605838
@@ -205,20 +204,28 @@ The bandwidth parameter $\gamma$ can be derived by the following:
 \sigma_{\text{Jaakkola}} &= \sqrt{1 / (2\gamma_{\text{Jaakkola}})} \Rightarrow \\
 \gamma_{\text{Jaakkola}} &= 1/2\sigma^2_{\text{Jaakkola}}
 \end{align*}
-I estimated $\sigma_{\text{Jaakkola}} = 898.205380106$
+I estimated $\sigma_{\text{Jaakkola}} = 609.035300487$
 therefore $\gamma_{\text{Jaakkola}}$ is estimated by:
 \begin{equation}
-\gamma_{\text{Jaakkola}} = 1 / 2 \times 898.205380106^2 = 6.197 \times 10^{-07}
+\gamma_{\text{Jaakkola}} = 1 / 2 \times 609.035300487^2 = 1.3479 \times 10^{-06}
 \end{equation}
-For the task, the library LIBSVM for python was used for training and classification. For parameter tuning grid search was applied, where each parameter setting was evaluated by performing 5-fold cross-validation. The choosing of parameters which yielded the lowest average zero - one loss over the 5-folds was inserted into the grid. The grid index with the lowest average zero - one loss, was determined as parameter settings. The values for $C$ and $\gamma$ were picked from the following set:
+For the task, the library LIBSVM for python was used for training and classification. The library implements the desired C-SVM. The C parameter determines the softness of the margin, where a small C gives a soft margin, which gives a higher bias but lower variance. A large C gives a hard margin, which gives a higher variance but a lower bias. Thus a large C will try to classify as much data as possible correctly, yielding a smaller margin. For the SVM the radial gaussian kernel is applied, which is defined as followed:
+\begin{equation}
+k(x,z) = exp(-\gamma || x - z ||^2)
+\end{equation}
+the parameter $\gamma$ defines 
+
+
+
+For parameter tuning grid search was applied, where each parameter setting was evaluated by performing 5-fold cross-validation. The choosing of parameters which yielded the lowest average zero - one loss over the 5-folds was inserted into the grid. The grid index with the lowest average zero - one loss, was determined as parameter settings. The values for $C$ and $\gamma$ were picked from the following set:
 \begin{align*}
-(C,\gamma) \in \left\{ b^{-3}, b^{-2}, b^{-1}, 1, b, b^{2}, b^{3} \right\} \times \left\{ \gamma_{Jaakkola} \cdot b^{i} | i \in \left\{ -3, -2, -1, 0, 1, 2, 3 \right\} \right\}
+(C,\gamma) \in \left\{ b^{-3}, b^{-2}, b^{-1}, 1, b, b^{2}, b^{3},b^4,b^5,b^6 \right\} \times \left\{ \gamma_{Jaakkola} \cdot b^{i} | i \in \left\{ -3, -2, -1, 0, 1, 2, 3 \right\} \right\}
 \end{align*}
 where $b \in \lbrace 2, e, 10 \rbrace$.
 Running the 5-fold cross validation the parameters for $C$ and $\gamma$ which gave the lowest average zero - one loss was
 \begin{align*}
 C &= b^4 \\
-\gamma &= \gamma_{Jaakkola} \cdot b^0
+\gamma &= \gamma_{Jaakkola} \cdot b^{-1}
 \end{align*}
 The lowest error was measured when b was 2 or $e$. The above parameters was obtained during training, below is the error of applying the SVM, with the above parameters on the training and testing data.
 
@@ -235,11 +242,11 @@ X_{f_{a,b}}  = \lbrace a x_i+b | x_i \in X \rbrace
 such that $\mu(X_{f_{a,b}})=0$ and $Var(X_{f_{a,b}})=1$ \\
 To achieve this, the mean of each input feature is found and subtracted. The mean is calculated by:
 \begin{equation*}
-\mu(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}x_i
+\mu_X = \dfrac{1}{N} \sum\limits^{N}_{i=1}x_i
 \end{equation*}
  Next the variance is found of each feature. The variance is calculated by:
 \begin{equation*}
-Var(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}(x_i - \mu)^2
+Var(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}(x_i - \mu_X)^2
 \end{equation*}
 The standard deviation $\sigma$ is equal to the square root of the variance and is used to normalize the data. The normalization can then be expressed as the following:
 \begin{equation}
@@ -251,30 +258,25 @@ For the below algorithms i will first state how i predict the normalization will
 First i will determine how the estimator is affected by the normalization. Given a logistic regression applied to normalized data we include the affine transformation in the calculation:
 \begin{align*}
 w^Tx' &= w^T \cdot (a x_i +b) \\
-&= w_0 + \sum\limits_{i=0}^N w \cdot (ax_i+b) \\ 
-&= w'_0 + \sum\limits_{i=1}^N w x_i \\
 &= w'^Tx
 \end{align*}
-when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$, $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters. Therefore the normalization shouldn't effect the classification procedure. \\
-Logistic regression uses gradient decent and this procedure, however effects from data normalization. One can view the normalization process of normalizing the shape of the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally.
-
-
-
+when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$ and $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters on the weights obtained from performing logistic regression without normalization. Therefore the normalization shouldn't effect the classification procedure. \\
+Logistic regression uses gradient decent and this procedure however effects from data normalization. The normalization can be said to normalize the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally. Given the above reasoning for normalization before applying logistic regression, i predict that the result will be somewhat equal to using the non-normalized data. Since the gradients have been normalized, i will have to adjust the learning rate $\epsilon$ and number of iterations. \\
 Applying normalization to the data before performing logistic regression worsens the generalazation in contrast to the SMV. Below is the average zero - one loss when normalization is applied to the dataset:
 \begin{align*}
-L(y,\hat{y})_{\text{trainnorm}} &= 0.440 \\
+L(y,\hat{y})_{\text{trainnorm}} &= 0.058 \\
 L(y,\hat{y})_{\text{testnorm}} &= 0.433
 \end{align*}
 As evident from the above errors, the logistic regression estimator is now only capabale of correctly classifying a little of half of the training and test data, which is very bad.
 \subsubsection{Support vector machines}
-Achieving zero-mean and unit-variance when using support vector machines is useful in multiple ways. kernels often depend on distances between points e.g the Gaussian kernel. To avoid inconsistency when calculating these distances it's necessary to scale the features to the same range. Like with logistic regression, SVM's solve an optimization problem, which benefits from scaled features.
+Achieving zero-mean and unit-variance when using support vector machines is useful in multiple ways. Kernels often depend on distances between points e.g the Gaussian kernel. To avoid larger numeric ranges dominating small ones, it's necessary to scale the features to the same range. Like with logistic regression, SVM's solve an optimization problem, which benefits from scaled features. Due to the feature scaling, i predict that the error will be lower, when using normalized data.
 %
 %http://sebastianraschka.com/Articles/2014_about_feature_scaling.html
 %The main advantage of scaling is to avoid attributes in greater numeric ranges dominating those in smaller numeric ranges. Another advantage is to avoid numerical diculties during the calculation. Because kernel values usually depend on the inner products of feature vectors, e.g. the linear kernel and the polynomial ker- nel, large attribute values might cause numerical problems. We recommend linearly scaling each attribute to the range [-1,+1] or [0,1].
 
 Applying zero mean and unit variance to the dataset before running the training the support vector machine leads to a different loss and different choice of hyper parameters. $b=2$ is still the best setting for b. The found parameters using grid search are as followed:
 \begin{align*}
-C &= b^3 \\
+C &= b^5 \\
 \gamma &= \gamma_{Jaakkola} \cdot b^{-3}
 \end{align*}
 The linear mapping was achieved on the training set, the same mapping is used on test set. The training and test error is as followed:
@@ -282,8 +284,77 @@ The linear mapping was achieved on the training set, the same mapping is used on
 L(y,\hat{y})_{\text{trainnorm}} &= 0.015 \\
 L(y,\hat{y})_{\text{testnorm}} &= 0.0278
 \end{align*}
-We note from the above errors that the normalized data yields the same train error, however we achieve a much better generalization of the data as the test error is lower.
+We note from the above errors that the normalized data yields the same train error, however as expected, we achieve a much better generalization of the data, as the test error is lower.
 %TODO discussion on why
-
-
+\subsubsection{Random Forest}
+Intuitively there is no need for normalization as the recursive splitting is not determined by the magnitude of the features, but a threshold. This threshold is feature scale invariant. \\
+For random forest we split the data, maximizing $G_{d,\theta}(S)$ the information gain. If we consider a split, on a data point $x$ normalized using the affine transformation  $f_{a,b}(x) = x'$. The split is determined by $(d,\theta)=(d,x'_d)$, the following is achieved:
+\begin{equation}
+\theta = x'_d = f_{a,b}(x)_d = ax_d + b_d \Leftrightarrow
+x_d = (\theta -b_j)/a
+\end{equation}
+Thus the parameters of the affine transformation, uniquely defines the threshold, and thus have no influence on the data.
+\subsection{Question 2.4}
+% implmeneted in ....
+The implementation of the PCA algorithm is located in the file \texttt{pca.py}. The algorithm performs the following steps:
+\begin{enumerate}
+\item{Separate features and target values of each data set}
+\item{For each feature, calculate the mean and withdraw it from the data points}
+\item{Compute the covariance matrix of the mean-less data}
+\item{Compute eigenvalues and eigenvectors of the covariance matrix}
+\item{Sort the eigenvectors based on the corresponding eigenvalue from largest to smallest}
+\item{Take the top k (dimension to reduce to) eigenvectors. These correspond to the k principle components}
+\item{Project the data into k dimensions by multiplying the principle components and the mean-less data}
+\end{enumerate}
+\subsubsection{Eigenspectrum}
+To compute the eigenspectrum the eigenvalues have been listed in descending order, and plotted on a logarithmic scale as shown in figure \ref{fig:eig}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{fig/2.png}
+  \caption{}
+  \label{fig:eig}
+\end{figure}
+The number of components necessary to explain 90 $\%$ of the data was determined to be 2 components. \\
+From figure \ref{fig:eig} it is evident that the variance drops linearly until about the 9th component where the variance plummets.
+\subsubsection{Projection onto two dimensions}
+The data has been projected down to two dimensions, by performing PCA with k = 2, that is multiplying the first two principle components onto the mean-less data. Figure \ref{fig:scatter} shows a scatter plot for the for the five different mappings from classes to shapes of the traffic signs.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{fig/3.png}
+  \caption{Scatter plot of the data \texttt{weed.csv} projected onto the two first principal components.}
+  \label{fig:scatter}
+\end{figure}
+The below table shows the correlation between the classification and the colour which they were plotted in. :
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+    \textsf{Class} & \textsf{Color}\\
+    \hline
+    \textsl{Weed} & \textsl{Red} \\
+    \hline
+    \textsl{Crop} & \textsl{Green} \\
+    \hline
+  \end{tabular}
+\end{table}
+From figure \ref{fig:scatter} we can see that the projection onto the two first principal components, describes the data well, as the data is somewhat divided into two clusters. Many of the points are well separated, however some red points (weed) lie in the green (crop) cluster, which could cause misclassification of crop weed images as weed-less crop images.
+\subsection{Question 2.5}
+The implementation of k-means clustering is included in the file \texttt{kmean.py}. The algorithm works as followed:
+\begin{enumerate}
+\item{$k$ cluster points are initialized, with a given position in the data. For this assignment the data is initialized to have the same position as the first two data points.}
+\item{For each data point in the input data, the point is assigned the cluster with the smallest euclidean distance.}
+\item{For each cluster, the mean of the assigned points are calculated
+and the cluster position is then updated with the mean.
+}
+\item{The two steps above are repeated until the clusters no longer move. The positions of these clusters are then returned. (For this implementation the algorithm stops once the clusters doesn't move, although as the clusters may converge for infinity, this is bad practice, but i didn't experience this.}
+\end{enumerate}
+Figure \ref{fig:clust1} shows the cluster position projected onto the two first principle components, using the same projection calculation as assignment 3.2. The starting positions of the two centroids correspond to the first two data points. All clusters converged after 30 iterations.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{fig/4.png}
+  \caption{The result of running 4-clustering on the dataset \texttt{ML2016TrafficSignsTrain.csv}, where the position of the clusters (blue dots) have been projected onto the first two principle components.
+  }
+  \label{fig:clust1}
+\end{figure}
+I also tried to perform the clustering with random data points as initialization of the centroids instead of the first two. However every initialization seemed to result in the centroids being located in the same, although with different number of iterations before converging. I believe i got meaningful clusters, as the centroids lie in each cluster, however it's clear that the overlapping data points could cause a high degree of misclassification. The clusters of points lie very close to each other. A clear division of the clusters would lead to better placements of the centroids.
 \end{document}

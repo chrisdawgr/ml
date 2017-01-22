@@ -143,7 +143,7 @@ The average error over the five folds is illustrated in figure
 \end{figure}
 The smallest MSE came from the parameter $k=9$, therefore 9 is the hyperparameter chosen. The following shows the result of running the 9-nearest-neighbour algorithm on the training and testing data. When applying k-nearest neighbour on the training data, the closest neighbour will always be itself, this is not the case for the test data, as the points are introduced to a dataset where they don't exists. The results are the following:
 \begin{align*}
-\text{MSE}_{\text{training}} &=  0.000465310841171 \\
+\text{MSE}_{\text{train}} &=  0.000465310841171 \\
 \text{MSE}_{\text{test}} &=  0.000588914605838
 \end{align*}
 The above results both show an MSE, which is far lower than the liner regression model. Thus the non-linear 9-nearest-neighbour has a better performance %TODO ..
@@ -180,16 +180,110 @@ l(y,\hat{y}) =
 \end{align*}
 The errors on the training and test data are as followed:
 \begin{align*}
-l(y,\hat{y})_{training} &= 24\\
+l(y,\hat{y})_{train} &= 24\\
 l(y,\hat{y})_{test} &= 18
 \end{align*}
 The empirical loss of the two errors is:
 \begin{align*}
-lL(y,\hat{y})_{training} &= 0.024\\
+L(y,\hat{y})_{training} &= 0.024\\
 L(y,\hat{y})_{test} &= 0.0313
 \end{align*}
 \subsection{Question 2.2}
+%TODO define what C and gamma is
+% https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine
+We wish to determine G, which is the following quantity:
+\begin{equation}
+G = \left\lbrace \text{min}_{x_j,y_j) \in S \wedge y_i \neq y_j}
+\left\lbrace || x_i - x_j || \right\rbrace | (x_i,y_i) \in S \right\rbrace 
+\end{equation}
+G is calculated by iterating the training data, and creating a list of training data points sorted by closest distance. The sorted list is then iterated, when a training point where $y_i \neq y_j$ is encountered, the distance $||x_i-x_j||$ is accumulated. The estimate $\sigma_{\text{Jaakkola}}$ is given by:
+\begin{equation}
+\sigma_{\text{Jaakkola}} = \text{median}(G)
+\end{equation}
+The bandwidth parameter $\gamma$ can be derived by the following:
+\begin{align*}
+\sigma_{\text{Jaakkola}} &= \sqrt{1 / (2\gamma_{\text{Jaakkola}})} \Rightarrow \\
+\gamma_{\text{Jaakkola}} &= 1/2\sigma^2_{\text{Jaakkola}}
+\end{align*}
+I estimated $\sigma_{\text{Jaakkola}} = 898.205380106$
+therefore $\gamma_{\text{Jaakkola}}$ is estimated by:
+\begin{equation}
+\gamma_{\text{Jaakkola}} = 1 / 2 \times 898.205380106^2 = 6.197 \times 10^{-07}
+\end{equation}
+For the task, the library LIBSVM for python was used for training and classification. For parameter tuning grid search was applied, where each parameter setting was evaluated by performing 5-fold cross-validation. The choosing of parameters which yielded the lowest average zero - one loss over the 5-folds was inserted into the grid. The grid index with the lowest average zero - one loss, was determined as parameter settings. The values for $C$ and $\gamma$ were picked from the following set:
+\begin{align*}
+(C,\gamma) \in \left\{ b^{-3}, b^{-2}, b^{-1}, 1, b, b^{2}, b^{3} \right\} \times \left\{ \gamma_{Jaakkola} \cdot b^{i} | i \in \left\{ -3, -2, -1, 0, 1, 2, 3 \right\} \right\}
+\end{align*}
+where $b \in \lbrace 2, e, 10 \rbrace$.
+Running the 5-fold cross validation the parameters for $C$ and $\gamma$ which gave the lowest average zero - one loss was
+\begin{align*}
+C &= b^4 \\
+\gamma &= \gamma_{Jaakkola} \cdot b^0
+\end{align*}
+The lowest error was measured when b was 2 or $e$. The above parameters was obtained during training, below is the error of applying the SVM, with the above parameters on the training and testing data.
 
+\begin{align*}
+L(y,\hat{y})_{\text{train}} &= 0.015 \\
+L(y,\hat{y})_{\text{test}} &= 0.0348
+\end{align*}
+\subsection{Question 2.3}
+%TODO how was zero mean and unit variance achieved
+To achieve zero-mean and unit-variance, we apply a linear mapping from the input data to the normalized output data, that is of the form $R^d \rightarrow R^d$. Thus we wish to determine some normalization function $ f_{a,b}$:
+\begin{equation}
+X_{f_{a,b}}  = \lbrace a x_i+b | x_i \in X \rbrace
+\end{equation}
+such that $\mu(X_{f_{a,b}})=0$ and $Var(X_{f_{a,b}})=1$ \\
+To achieve this, the mean of each input feature is found and subtracted. The mean is calculated by:
+\begin{equation*}
+\mu(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}x_i
+\end{equation*}
+ Next the variance is found of each feature. The variance is calculated by:
+\begin{equation*}
+Var(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}(x_i - \mu)^2
+\end{equation*}
+The standard deviation $\sigma$ is equal to the square root of the variance and is used to normalize the data. The normalization can then be expressed as the following:
+\begin{equation}
+X_{f_{a,b}} = \dfrac{1}{\sigma_X} + \dfrac{- \mu_X}{\sigma_X} = \dfrac{X - \mu_X }{\sigma_X}
+\label{norm}
+\end{equation}
+For the below algorithms i will first state how i predict the normalization will effect the estimation, then results of the algorithms on the normalized data.
+\subsubsection{Logistic regression}
+First i will determine how the estimator is affected by the normalization. Given a logistic regression applied to normalized data we include the affine transformation in the calculation:
+\begin{align*}
+w^Tx' &= w^T \cdot (a x_i +b) \\
+&= w_0 + \sum\limits_{i=0}^N w \cdot (ax_i+b) \\ 
+&= w'_0 + \sum\limits_{i=1}^N w x_i \\
+&= w'^Tx
+\end{align*}
+when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$, $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters. Therefore the normalization shouldn't effect the classification procedure. \\
+Logistic regression uses gradient decent and this procedure, however effects from data normalization. One can view the normalization process of normalizing the shape of the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally.
+
+
+
+Applying normalization to the data before performing logistic regression worsens the generalazation in contrast to the SMV. Below is the average zero - one loss when normalization is applied to the dataset:
+\begin{align*}
+L(y,\hat{y})_{\text{trainnorm}} &= 0.440 \\
+L(y,\hat{y})_{\text{testnorm}} &= 0.433
+\end{align*}
+As evident from the above errors, the logistic regression estimator is now only capabale of correctly classifying a little of half of the training and test data, which is very bad.
+\subsubsection{Support vector machines}
+Achieving zero-mean and unit-variance when using support vector machines is useful in multiple ways. kernels often depend on distances between points e.g the Gaussian kernel. To avoid inconsistency when calculating these distances it's necessary to scale the features to the same range. Like with logistic regression, SVM's solve an optimization problem, which benefits from scaled features.
+%
+%http://sebastianraschka.com/Articles/2014_about_feature_scaling.html
+%The main advantage of scaling is to avoid attributes in greater numeric ranges dominating those in smaller numeric ranges. Another advantage is to avoid numerical diculties during the calculation. Because kernel values usually depend on the inner products of feature vectors, e.g. the linear kernel and the polynomial ker- nel, large attribute values might cause numerical problems. We recommend linearly scaling each attribute to the range [-1,+1] or [0,1].
+
+Applying zero mean and unit variance to the dataset before running the training the support vector machine leads to a different loss and different choice of hyper parameters. $b=2$ is still the best setting for b. The found parameters using grid search are as followed:
+\begin{align*}
+C &= b^3 \\
+\gamma &= \gamma_{Jaakkola} \cdot b^{-3}
+\end{align*}
+The linear mapping was achieved on the training set, the same mapping is used on test set. The training and test error is as followed:
+\begin{align*}
+L(y,\hat{y})_{\text{trainnorm}} &= 0.015 \\
+L(y,\hat{y})_{\text{testnorm}} &= 0.0278
+\end{align*}
+We note from the above errors that the normalized data yields the same train error, however we achieve a much better generalization of the data as the test error is lower.
+%TODO discussion on why
 
 
 \end{document}

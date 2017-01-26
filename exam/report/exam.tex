@@ -122,7 +122,7 @@ Normalizing the error w.r.t the variance yields the following result:
 \dfrac{0.0018621}{0.0106043856253} = 0.17559716006
 \label{eq:3}
 \end{align}
-As the least-squared estimator is unbiased, the mean-squared error is the variance of our linear estimator. By comparing the mean-squared-error, and the variance of the data we can see to what extend the estimator captures the variance of the data. For example if the variance of the data is high and the mean-squared-error is small compared, then the estimator has over-fitted the data. Equation \eqref{eq:3} will then be less than 1. If on the other hand the mean-squared-error is very large compared to the variance, then the estimator has under fitted the data. In this case equation \eqref{eq:3} will be greater than 1.
+As the least-squared estimator is an unbiased estimator, the mean-squared error is the variance of our linear estimator. By comparing the mean-squared-error, and the variance of the data we can see to what extend the estimator captures the variance of the data. For example if the variance of the data is high and the mean-squared-error is small compared, then the estimator has over-fitted the data. Equation \eqref{eq:3} will then be less than 1. If on the other hand the mean-squared-error is very large compared to the variance, then the estimator has under fitted the data. In this case equation \eqref{eq:3} will be greater than 1.
 \subsection{Question 1.3}
 The file \texttt{KNN.py} implements the k-nearest neighbour and cross-validation algorithms described in this section.
 \\
@@ -186,17 +186,17 @@ l(y,\hat{y}) =
 \end{align*}
 The errors on the training and test data are as followed:
 \begin{align*}
-l(y,\hat{y})_{train} &= 24\\
-l(y,\hat{y})_{test} &= 18
+l(y,\hat{y})_{train} &= 26\\
+l(y,\hat{y})_{test} &= 20
 \end{align*}
-The empirical loss of the two errors is:
-\begin{align*}
-L(y,\hat{y})_{training} &= 0.024\\
-L(y,\hat{y})_{test} &= 0.0313
-\end{align*}
+%The empirical loss of the two errors is:
+%\begin{align*}
+%L(y,\hat{y})_{training} &= 0.026\\
+%L(y,\hat{y})_{test} &= 0.0348
+%\end{align*}
+where the training data consists of 1000 examples and the test data 574 examples. Although the above results may have a high error, the model exhibits good generalization on the test data as the empirical loss (average loss) is somewhat close to the expected loss.
 \subsection{Question 2.2}
 The file \texttt{svmc.py} implements the below experiments, grid search and cross-validation. \\
-%TODO define what C and gamma is
 % https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine
 We wish to determine G, which is the following quantity:
 \begin{equation}
@@ -231,15 +231,14 @@ Running the 5-fold cross validation the parameters for $C$ and $\gamma$ which ga
 C &= b^4 \\
 \gamma &= \gamma_{Jaakkola} \cdot b^{-1}
 \end{align*}
-The lowest error was measured when b was 2 or $e$. The above parameters was obtained during training, below is the error of applying the SVM, with the above parameters on the training and test data.
-
+The lowest error on the training data was measured when b was 2 or $e$. The above parameters was obtained during training, below is the error of applying the SVM, with the above parameters on the training and test data.
 \begin{align*}
 L(y,\hat{y})_{\text{train}} &= 0.015 \\
 L(y,\hat{y})_{\text{test}} &= 0.0348
 \end{align*}
+It is notable that the training error is very low compared to error achieved by the logistic regression algorithm. However the test error is very high compared to the training error, which means that the model does not generalize well on the unseen data, as the expected loss does not track the empirical loss.
 \subsection{Question 2.3}
 The normalization of both procedures is defined respectively in the files they were implemented in. \\
-%TODO how was zero mean and unit variance achieved
 To achieve zero-mean and unit-variance, we apply a linear mapping from the input data to the normalized output data, that is of the form $R^d \rightarrow R^d$. Thus we wish to determine some normalization function $ f_{a,b}$:
 \begin{equation}
 X_{f_{a,b}}  = \lbrace a x_i+b | x_i \in X \rbrace
@@ -255,28 +254,28 @@ Var(X) = \dfrac{1}{N} \sum\limits^{N}_{i=1}(x_i - \mu_\mathbf{X})^2
 \end{equation*}
 The standard deviation $\sigma$ is equal to the square root of the variance and is used to normalize the data. The normalization can then be expressed as the following:
 \begin{equation}
-X_{f_{a,b}} = \dfrac{1}{\sigma_\mathbf{X}} + \dfrac{- \mu_\mathbf{X}}{\sigma_\mathbf{X}} = \dfrac{\mathbf{X} - \mu_\mathbf{X} }{\sigma_\mathbf{X}}
+X_{f_{a,b}} = \dfrac{1}{\sigma_\mathbf{X}}\mathbf{x} + \dfrac{- \mu_\mathbf{X}}{\sigma_\mathbf{X}} = \dfrac{\mathbf{x} - \mu_\mathbf{x} }{\sigma_\mathbf{X}}
 \label{norm}
 \end{equation}
 For the below algorithms i will first state how i predict the normalization will effect the estimation, then results of the algorithms on the normalized data.
 \subsubsection{Logistic regression}
-First i will determine how the estimator is affected by the normalization. Given a logistic regression applied to normalized data we include the affine transformation in the calculation:
+First i will determine how the estimator is affected by the normalization. Given a logistic regression applied to normalized data $ x'$ we include the affine transformation in the calculation:
 \begin{align*}
 w^Tx' &= w^T \cdot (a x_i +b) \\
 &= w'^Tx
 \end{align*}
-when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$ and $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters on the weights obtained from performing logistic regression without normalization. Therefore the normalization shouldn't effect the classification procedure. \\
+when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$ and $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters on the weights obtained from performing logistic regression without normalization. Thus the normalization shouldn't effect the classification procedure. \\
 Logistic regression uses gradient decent and this procedure however effects from data normalization. The normalization can be said to normalize the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally. Given the above reasoning for normalization before applying logistic regression, i predict that the result will be somewhat equal to using the non-normalized data. Since the gradients have been normalized, i will have to adjust the learning rate $\epsilon$ and number of iterations. \\
 Applying normalization to the data before performing logistic regression worsens the generalization in contrast to the SMV. Below is the zero - one loss when normalization is applied to the dataset:
 \begin{align*}
 l(y,\hat{y})_{train} &= 57\\
 l(y,\hat{y})_{test} &= 44
 \end{align*}
-The empirical loss of the two errors is:
-\begin{align*}
-L(y,\hat{y})_{\text{trainnorm}} &= 0.057 \\
-L(y,\hat{y})_{\text{testnorm}} &= 0.076
-\end{align*}
+%The empirical loss of the two errors is:
+%\begin{align*}
+%L(y,\hat{y})_{\text{trainnorm}} &= 0.057 \\
+%L(y,\hat{y})_{\text{testnorm}} &= 0.076
+%\end{align*}
 As evident from the above errors, the logistic regression estimator performs worse when applied to normalized data. This was not expected given the above discussion.
 \subsubsection{Support vector machines}
 Achieving zero-mean and unit-variance when using support vector machines is useful in multiple ways. Kernels often depend on distances between points e.g the Gaussian kernel. To avoid larger numeric ranges dominating small ones, it's necessary to scale the features to the same range. Like with logistic regression, SVM's solve an optimization problem, which benefits from scaled features. Due to the feature scaling, i predict that the error will be lower, when using normalized data.
@@ -303,7 +302,7 @@ For random forest we split the data, maximizing $G_{d,\theta}(S)$ the informatio
 \theta = x'_d = f_{a,b}(x)_d = ax_d + b_d \Leftrightarrow
 x_d = (\theta -b_j)/a
 \end{equation}
-Thus the parameters of the affine transformation, uniquely defines the threshold, and therefore have no influence on the data.
+Thus the parameters of the affine transformation, uniquely defines the threshold, and therefore have no influence on the classification.
 \subsection{Question 2.4}
 The file \texttt{pca.py} implements the principle component analysis described below \\
 The implementation of the PCA algorithm is located in the file \texttt{pca.py}. The algorithm performs the following steps:
@@ -369,18 +368,7 @@ Figure \ref{fig:clust1} shows the cluster position projected onto the two first 
 I also tried to perform the clustering with random data points as initialization of the centroids instead of the first two. However every initialization seemed to result in the centroids being located in the same spot, although with different number of iterations before converging. I believe i got meaningful clusters, as the centroids lie in each cluster, however it's clear that the overlapping data points could cause a high degree of misclassification. The clusters of points lie very close to each other. A clearer division of the clusters would lead to better placements of the centroids.
 \section{3. Generalization bound for learning with multiple feature mappings}
 \subsection{Question 1}
-First we note that the VC-dimension of a hyperplane in the dimension $d$ is $d+1$, that is we can shatter at most $d+1$ points. \\
-First we consider a set on $N=d+1$ points in dimension $d$. We want to show that it is possible for a hyperplane in dimension $d$ to shatter these points. If we start by constructing a $d+1 \times d+1$ matrix for the data set. The dimension of each data point is $d$, and we include $x_0 =1$ so each datapoint is a $d+1$ vector.
-We set the rest of the matrix to be the identity matrix and construct a vector y of $d+1$ targetvalues, each target being $\pm1$. We want to find a weight vector w satisfying:
-$$
-\text{sign}(Xw)=y
-$$
-however we note that following the definition of X allows to calculate this by simply taking the value, instead of the sign. We can then determine w such that we can shatter the points
-$$
-w = X^{-1}y
-$$
-meaning we can shatter $d+1$ points. \\
-To show that it is not possible for the hyperplane to shatter $d+2$ points, we note that we have more vectors than dimensions, therefore the points must be linearly dependent and we therefore cannot define a w which shattered all the points. \\
+First we note that the VC-dimension of a hyperplane in dimension $d$ is $d+1$, that is we can shatter at most $d+1$ points. 
 When performing a mapping from an $x$ space to a $z$ feature space, we map a $d$ dimensional vector, representing our input to a new $\tilde{d}$ feature space:
 $$
 X = (x_0,x_1,...,x_d) \xrightarrow{\text{  \hspace{0.15cm}} \Phi \text{  \hspace{0.15cm}}} z = (z_0,z_1,...,z_{\tilde{d} })
@@ -389,20 +377,20 @@ The Q-th order polynomial transformation $\Phi_Q(x)$ is used, listing all monomi
 \begin{equation}
 \tilde{d} = \binom{d+Q}{Q}-1
 \end{equation}
-The minus one is because we don't count 1 as a monomial.
+The minus one is because we don't count 1 as a dimension.
 We now have a $\tilde{d}$ dimensional feature space. The total number that the hyperplane can shatter in this feature space and the VC-dimension is therefore:
 %TODO PROOF http://www.cs.cmu.edu/~ninamf/ML11/lect1020.pdf
 \begin{equation}
-d_{vc} = \left( \binom{d+Q}{Q}-1 \right) + 1
+d_{vc} \leq  \tilde{d} + 1
 \end{equation}
 %We can prove this by induction over d and Q. For $n=1$, we correctly have the value $d+1$ and vice versa.
 We now have the inequality for the wanted bound:
 \begin{equation}
 \left( \binom{d+Q}{Q}-1 \right) + 1 \leq (Q+1)d^Q
 \end{equation}
-which clearly holds for all $Q,d \geq 0$
+which holds for all $Q,d \geq 0$
 \subsection{Question 2}
-From the lecture notes we have the following VC generalization bound.
+From theorem 3.7 in the lecture notes we have the following VC generalization bound.
 \begin{equation}
 Pr \left[ \exists h \in \mathcal{H}: L(h) \geq L(\hat{h},S)+
 \sqrt{ \dfrac{8 \text{ ln} (2((2n)^{d_{vc}}+1) / \delta}{n}} \right] \leq \delta 
@@ -412,7 +400,7 @@ which we can write the complement of for all $\mathcal{H}$ to arrive at the foll
 Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 \sqrt{ \dfrac{8 \text{ ln} (2((2n)^{d_{vc}}+1) / \delta}{n}} \right] \geq 1- \delta 
 \end{equation}
-where $d_{vc} \leq (Q+t)d^Q$
+which we can write in terms of the bounded vc dimension, where $d_{vc} \leq (Q+t)d^Q$
 \begin{equation}
 Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 \sqrt{ \dfrac{8 \text{ ln} (2((2n)^{(Q+t)d^Q}+1) / \delta}{n}} \right] \geq 1- \delta 
@@ -428,14 +416,64 @@ We can bound $||\Phi_Q(x)||$ by $||\Phi^+_Q(x)||$ as $\Phi^+_Q(x)$ will contain 
 \end{equation}
 Therefore we can write the following for the norm of $\Phi^+_Q(x)$:
 \begin{equation}
-||\Phi^+_Q(x)|| = \sqrt{ \langle \Phi^+_Q(x), \Phi^+_Q(x)}
+||\Phi^+_Q(x)|| = \sqrt{ \langle \Phi^+_Q(x), \Phi^+_Q(x) \rangle}
 \end{equation}
 Using the kernel trick we can write the above using the $x$ space:
 \begin{equation}
-||\Phi^+_Q(x)|| = \sqrt{(1+x^Tx)^Q}
+||\Phi^+_Q(x)|| = \sqrt{1+ \sum\limits_{i=1}^Q (x^Tx)^i}
 \end{equation}
 Thus we can conclude the following bound on $||\Phi_Q(x)||$:
 \begin{equation}
-||\Phi_Q(x)|| \leq \sqrt{(1+x^Tx)^Q}
+||\Phi_Q(x)|| \leq \sqrt{1+ \sum\limits_{i=1}^Q (x^Tx)^i}
 \end{equation}
+For each monomial at some order we have the the norm of the monomial cannot exceed 1 as the monomial is some multiplication combination of $x$ and since $||x|| \leq 1$ we can say the same for the rest of the monomials. Thus if the number of monomials is $|\Phi_Q|$ then the norm is bounded as:
+\begin{equation}
+||\Phi_Q|| \leq \sqrt{| \Phi_Q|}
+\end{equation}
+%TODO  sqrt(ØQ)
+\subsection{Question 4}
+From theorem 3.8 in the lecture notes we have the following bound on the VC dimension for hypothesis with the width of the margin being at least $\rho$:
+\begin{equation}
+d_{vc}(\mathcal{H}_\rho) = \lceil R^2 / \rho^2 \rceil
+\end{equation}
+Where $R$ is the maximal norm. If we set $R \leq || \Phi_Q(x)||$ which was derived in question 3, we get the following:
+\begin{equation}
+d_{vc}(\mathcal{H}_\rho) \leq \lceil \sqrt{| \Phi_Q|}^2  / \rho^2 \rceil
+\end{equation}
+following the definition from the proof of the lecture notes, we set $
+| \Phi_Q| / \rho^2 = i$, which we can use to express $w$: $\lceil || w^2|| \rceil \cdot| \Phi_Q|$. We can therefore express the following:
+\begin{equation}
+Pr \left[ \exists h \in \mathcal{H}_i: L(h) \geq L(\hat{h},S)+
+\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) / \delta_i}{n}} \right] \leq \delta_i 
+\end{equation}
+the same values of $\delta$ can be used here so we get the same derivation as the proof of theorem 3.9 we can therefore achieve the following generalization bound.
+\begin{equation}
+Pr \left[ \exists h \in \mathcal{H}: L(h) \geq L(\hat{h},S)+
+\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta_i}{n}} \right] \leq \delta_i 
+\end{equation}
+%in which we can derive a high probability bound for L as followed:
+\subsection{Question 5}
+Given the infinite hypothesis set $\mathcal{H} = \cup_{Q=1}^\infty \mathcal{H}_Q$ we note from assignment 1 that it is possible to shatter $d+1$ points, when the feature space has dimension d. Our hypothesis set now consist of all monomials  up to infinity and the feature space will therefore have dimension $R^\infty$. Therefore by definition we can shatter $\infty +1$ points, thus the VC dimension is:
+$$ d_{vc}(\mathcal{H}) = \infty $$
+\subsection{Question 6}
+From the bound obtained in question 5, we can re-write it for all $w \in h$:
+\begin{equation}
+Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
+\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta_i}{n}} \right] \geq 1- \delta_i 
+\end{equation} 
+From Question 5 we have that the VC-dimension is infinite, therefore we can shatter all $N$ points and define the growth function as followed:
+\begin{equation}
+m_\mathcal{H} = 2^N
+\end{equation}
+We can enter this into the VC-generalization bound (Abu-Mostafa et al., 2012 Theorem 2.5) and achieve the following bound
+\begin{equation}
+Pr \left[ \forall h \in \mathcal{H}: L(h) \geq \hat{L}(h,S) +
+\sqrt{\dfrac{8}{N}\text{ln} \dfrac{4m 2^{2n}}{\delta}} \right] \geq 1-\delta
+\end{equation}
+which is the desired bound, however not dependent on the margin.
+\subsection{Question 7}
+
+\subsection{Question 8}
+
+\subsection{Question 9}
 \end{document}

@@ -73,7 +73,7 @@
 \title{
 \vspace{1in}
 \textmd{\textbf{Machine Learning Exam}} \\
-\author{Christoffer Thrysøe - dfv107}
+\author{Christoffer Thrysøe - dfv107 \\ Exam number: 347}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -453,27 +453,28 @@ Pr \left[ \exists h \in \mathcal{H}: L(h) \geq L(\hat{h},S)+
 \end{equation}
 %in which we can derive a high probability bound for L as followed:
 \subsection{Question 5}
-Given the infinite hypothesis set $\mathcal{H} = \cup_{Q=1}^\infty \mathcal{H}_Q$ we note from assignment 1 that it is possible to shatter $d+1$ points, when the feature space has dimension d. Our hypothesis set now consist of all monomials  up to infinity and the feature space will therefore have dimension $R^\infty$. Therefore by definition we can shatter $\infty +1$ points, thus the VC dimension is:
+Given the infinite hypothesis set $\mathcal{H} = \cup_{Q=1}^\infty \mathcal{H}_Q$ we note from assignment 1 that it is possible to shatter $d+1$ points, when the feature space has dimension d. Our hypothesis set now consist of all monomials  up to infinity and the feature space will therefore have dimension $R^\infty$. Therefore by definition we can shatter all $N$ points, thus the VC dimension is:
 $$ d_{vc}(\mathcal{H}) = \infty $$
 \subsection{Question 6}
-From the bound obtained in question 5, we can re-write it for all $w \in h$:
+From the bound obtained in question 5, we can re-write it for all $w \in \mathcal{H}$:
 \begin{equation}
 Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 \sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta_i}{n}} \right] \geq 1- \delta_i 
 \end{equation} 
-From Question 5 we have that the VC-dimension is infinite, therefore we can shatter all $N$ points and define the growth function as followed:
-\begin{equation}
-m_\mathcal{H} = 2^N
-\end{equation}
-We can enter this into the VC-generalization bound (Abu-Mostafa et al., 2012 Theorem 2.5) and achieve the following bound
-\begin{equation}
-Pr \left[ \forall h \in \mathcal{H}: L(h) \geq \hat{L}(h,S) +
-\sqrt{\dfrac{8}{N}\text{ln} \dfrac{4m 2^{2n}}{\delta}} \right] \geq 1-\delta
-\end{equation}
-which is the desired bound, however not dependent on the margin.
+%From Question 5 we have that the VC-dimension is infinite, therefore we can shatter all $N$ points and define the growth function as followed:
+%\begin{equation}
+%m_\mathcal{H} = 2^N
+%\end{equation}
+%We can enter this into the VC-generalization bound (Abu-Mostafa et al., 2012 Theorem 2.5) and achieve the following bound
+%\begin{equation}
+%Pr \left[ \forall h \in \mathcal{H}: L(h) \geq \hat{L}(h,S) +
+%\sqrt{\dfrac{8}{N}\text{ln} \dfrac{4m 2^{2n}}{\delta}} \right] \geq %1-\delta
+%\end{equation}
+%which is the desired bound, however not dependent on the margin.
 \subsection{Question 7}
 
 \subsection{Question 8}
-
+From question 6, we note that even if the margin is large, the generalization will be bad if the hypothesis has a large VC dimension, as we multiply with the number of monomials. The intuitive notion behind this is that we can't map our input space to an infinite feature space and expect that maximizing the margin will provide a good generalization. Thus it follows from corollary 3.11 that when we have an infinite VC dimension, it is impossible to achieve a high probability bound as $n$ goes to infinity. 
 \subsection{Question 9}
+Minimizing the bound leads to a greater generalization of the model, however the flexibility of the model is limited, resulting in a bigger error. Maximizing the margin (minimizing $||w||^2$) leads to a better generalization of the data as it ensures that unseen data are more likely to be classified correctly. There is a trade-off when minimizing the generalization, as minimizing means to limit the $Z$ space of the given hypothesis. While achieving a good generalization, the limited model may fail to capture important parts of the data which a more complex hypothesis could have, thus resulting in a bad model. 
 \end{document}

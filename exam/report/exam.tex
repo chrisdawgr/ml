@@ -118,11 +118,13 @@ The MSE on the training and test data is defined below:
 Normalizing the error w.r.t the variance yields the following result:
 
 \begin{align}
+\label{eq:vars}
 \dfrac{\text{MSE}_{\text{train}}}{\sigma^2_{\text{red}}} =
 \dfrac{0.0018621}{0.0106043856253} = 0.17559716006
-\label{eq:3}
 \end{align}
-As the least-squared estimator is an unbiased estimator, the mean-squared error is the variance of our linear estimator. By comparing the mean-squared-error, and the variance of the data we can see to what extend the estimator captures the variance of the data. For example if the variance of the data is high and the mean-squared-error is small compared, then the estimator has over-fitted the data. Equation \eqref{eq:3} will then be less than 1. If on the other hand the mean-squared-error is very large compared to the variance, then the estimator has under fitted the data. In this case equation \eqref{eq:3} will be greater than 1.
+% variance we can expect
+One can say that the MSE estimates the error variance. If we have that the points are distributed at random, the variance and the MSE of the linear fit will be close to identical, thus \eqref{eq:vars} will be 1. The only way we can have that \eqref{eq:vars} is greater than 1 is if the data is not linear as the otherwise the MSE will be less than the variance. If the data is perfectly linear and we apply linear regression, then the only way we can have that \eqref{eq:vars} is greater than 1 is if the linear fit is worse than the horizontal mean line. However this will not be possible, applying least squares, except if the data don't fit the model.
+
 \subsection{Question 1.3}
 The file \texttt{KNN.py} implements the k-nearest neighbour and cross-validation algorithms described in this section.
 \\
@@ -370,7 +372,7 @@ Figure \ref{fig:clust1} shows the cluster position projected onto the two first 
 I also tried to perform the clustering with random data points as initialization of the centroids instead of the first two. However every initialization seemed to result in the centroids being located in the same spot, although with different number of iterations before converging. I believe i got meaningful clusters, as the centroids lie in each cluster, however it's clear that the overlapping data points could cause a high degree of misclassification. The clusters of points lie very close to each other. A clearer division of the clusters would lead to better placements of the centroids.
 \section{3. Generalization bound for learning with multiple feature mappings}
 \subsection{Question 1}
-First we note that the VC-dimension of a hyperplane in dimension $d$ is $d+1$, that is we can shatter at most $d+1$ points. 
+First we note that the VC-dimension of a hyperplane in dimension $d$ is $d+1$ (Abu-Mostafa et al., 2012 page 52), that is we can shatter at most $d+1$ points. 
 When performing a mapping from an $x$ space to a $z$ feature space, we map a $d$ dimensional vector, representing our input to a new $\tilde{d}$ feature space:
 $$
 X = (x_0,x_1,...,x_d) \xrightarrow{\text{  \hspace{0.15cm}} \Phi \text{  \hspace{0.15cm}}} z = (z_0,z_1,...,z_{\tilde{d} })
@@ -408,7 +410,7 @@ Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 \sqrt{ \dfrac{8 \text{ ln} (2((2n)^{(Q+t)d^Q}+1) / \delta}{n}} \right] \geq 1- \delta 
 \end{equation}
 \subsection{Question 3}
-The norm for an n-dimensional vector is defined as followed:
+The norm for an n-dimensional vector is defined as followed (Lecture slides on kernels):
 $$
 || x || = \sqrt{x_1^2 + ... + x_n^2}
 $$

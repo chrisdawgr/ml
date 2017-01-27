@@ -126,8 +126,10 @@ As the least-squared estimator is an unbiased estimator, the mean-squared error 
 \subsection{Question 1.3}
 The file \texttt{KNN.py} implements the k-nearest neighbour and cross-validation algorithms described in this section.
 \\
-For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous assignment, however for regression instead of classification. The process of obtaining the k-nearest neighbours of a sample is the same, the euclidean distance from each point in question is taken to the rest of the points, the top k points with the lowest distances are marked as neighbours.The regression variant doesn't use a voting phase 
-on the target-values of the k-nearest neighbours, but the mean of their target-values instead as shown in equation \eqref{eq:knn}.
+For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous assignment, however for regression instead of classification.
+I chose the k-nearest neighbour algorithm is that it usually makes good predictions on the data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data can be tough due to the dimensionality. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in features with high numerical ranges dominating low ones. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
+The process of obtaining the k-nearest neighbours of a sample is the same: The euclidean distance from each point in question is taken to the rest of the points, the top k points with the lowest distances are marked as neighbours.The regression variant doesn't use a voting phase 
+on the target-values of the k-nearest neighbours, but the mean of their target-values instead, as shown in equation \eqref{eq:knn}.
 \begin{equation}
 \hat{y} =  \dfrac{1}{K} \sum\limits_{i=0}^K y(x_i)
 \label{eq:knn}
@@ -135,7 +137,7 @@ on the target-values of the k-nearest neighbours, but the mean of their target-v
 where $y$ denotes the target value associated with the independent variable $x$. \\
 For hyper parameter tuning, i.e. finding the optimal value of $k$, i have used a 5-fold cross-validation. The training set of 5000 samples is split into 5 equally sized partitions, each of these partitions is by turn used as a validation set and the rest as a training set. The k-nearest neighbour algorithm is applied to each of the partitions, and the average MSE error over these folds determines the average error for the given value k. The k with the lowest average error is used as the parameter of the k-nearest neighbour algorithm.
 \\
-A reason for choosing the k-nearest neighbour algorithm is that it usually makes good generalizations on data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data can be tedious due to the dimensionality. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in features with high numerical ranges dominating low ones. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
+
 The cross validation has been performed for the following values of k:
 $$ k \in \left[ 1,3,5,7,9,11,13,15,17,19,21,23,25 \right] $$
 The average error over the five folds is illustrated in figure \ref{fig:mulplots}.
@@ -150,7 +152,7 @@ The smallest MSE averaged over 5-folds was achieved using the parameter $k=9$, t
 \text{MSE}_{\text{train}} &=  0.000465310841171 \\
 \text{MSE}_{\text{test}} &=  0.000588914605838
 \end{align*}
-The above results both show an MSE, which is far lower than the liner regression model. Thus the non-linear 9-nearest-neighbour has a better performance %TODO ..
+The above results both show an MSE, which is far lower than the liner regression model. Thus the non-linear 9-nearest-neighbour has a better performance, and provides a good generalization on the data.
 \section{2. Weed}
 \subsection{Question 2.1}
 The file \texttt{logRes.py} implements the logistic regression algorithm described below.
@@ -265,7 +267,7 @@ w^Tx' &= w^T \cdot (a x_i +b) \\
 &= w'^Tx
 \end{align*}
 when $x_0 = w_0 + \sum_{i=0}^d b_i w_i$ and $ w'_i = a w_i$. Therefore the weights obtained using normalized data, can be obtained by using the affine transformation parameters on the weights obtained from performing logistic regression without normalization. Thus the normalization shouldn't effect the classification procedure. \\
-Logistic regression uses gradient decent and this procedure however effects from data normalization. The normalization can be said to normalize the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally. Given the above reasoning for normalization before applying logistic regression, i predict that the result will be somewhat equal to using the non-normalized data. Since the gradients have been normalized, i will have to adjust the learning rate $\epsilon$ and number of iterations. \\
+Logistic regression uses gradient decent and this procedure however effects from data normalization. The normalization can be said to normalize the gradient surface. Normalization is often  used in the context of optimization problems, where computations of large gradients are expensive and may cause overflow. The normalization also makes convergence faster and ensures that weights are updated somewhat equally. Given the above reasoning for normalizatio,n before applying logistic regression, I predict that the result will be somewhat equal to using the non-normalized data. Since the gradients have been normalized, I will have to adjust the learning rate $\epsilon$ and number of iterations. \\
 Applying normalization to the data before performing logistic regression worsens the generalization in contrast to the SMV. Below is the zero - one loss when normalization is applied to the dataset:
 \begin{align*}
 l(y,\hat{y})_{train} &= 57\\
@@ -293,10 +295,10 @@ The linear mapping was achieved on the training set, the same mapping is used on
 L(y,\hat{y})_{\text{trainnorm}} &= 0.015 \\
 L(y,\hat{y})_{\text{testnorm}} &= 0.0278
 \end{align*}
-We note from the above errors that the normalized data yields the same train error, however as expected, we achieve a much better generalization of the data, as the test error is lower.
+We note from the above errors that the normalized data yields the same error on the training set, however as expected, we achieve a much better generalization of the data, as the test error is lower.
 %TODO discussion on why
 \subsubsection{Random Forest}
-Intuitively there is no need for normalization as the recursive splitting is not determined by the magnitude of the features, but a threshold. This threshold is feature scale invariant. \\
+Intuitively there is no need for normalization as the recursive splitting is not determined by the magnitude of the features, but an impurity measure. The threshold at each node is feature scale invariant, and a scaling of the features will only reflect in a shift of this threshold, thus not impacting the split. \\
 For random forest we split the data, maximizing $G_{d,\theta}(S)$ the information gain. If we consider a split, on a data point $x$ normalized using the affine transformation  $f_{a,b}(x) = x'$. The split is determined by $(d,\theta)=(d,x'_d)$, the following is achieved:
 \begin{equation}
 \theta = x'_d = f_{a,b}(x)_d = ax_d + b_d \Leftrightarrow
@@ -320,10 +322,10 @@ To compute the eigenspectrum the eigenvalues have been listed in descending orde
 \begin{figure}[H]
   \centering
   \includegraphics[width=15cm]{fig/2.png}
-  \caption{Variance plotted as a function of the principle components.}
+  \caption{Variance of each principle component in descending order. 90\% of the variance is described after the second principle component.}
   \label{fig:eig}
 \end{figure}
-The number of components necessary to explain 90 $\%$ of the data was determined to be \textbf{2 components}. \\
+The number of principle components necessary to explain 90 $\%$ of the variance was determined to be \textbf{2 components}. \\
 From figure \ref{fig:eig} it is evident that the variance drops linearly until about the 9th component where the variance plummets.
 \subsubsection{Projection onto two dimensions}
 The data has been projected down to two dimensions, by performing PCA with k = 2, that is multiplying the first two principle components onto the mean-less data. Figure \ref{fig:scatter} shows a scatter plot for the for crops and weed.
@@ -351,7 +353,7 @@ From figure \ref{fig:scatter} we can see that the projection onto the two first 
 The implementation of k-means clustering is included in the file \texttt{kmean.py}. \\ The algorithm works as followed:
 \begin{enumerate}
 \item{$k$ cluster points are initialized, with a given position in the data. For this assignment the data is initialized to have the same position as the first two data points.}
-\item{For each data point in the input data, the point is assigned the cluster with the smallest euclidean distance.}
+\item{Each data point is assigned the cluster with the smallest euclidean distance.}
 \item{For each cluster, the mean of the assigned points are calculated
 and the cluster position is then updated with the mean.
 }
@@ -449,11 +451,11 @@ Pr \left[ \exists h \in \mathcal{H}_i: L(h) \geq L(\hat{h},S)+
 the same values of $\delta$ can be used here so we get the same derivation as the proof of theorem 3.9 we can therefore achieve the following generalization bound.
 \begin{equation}
 Pr \left[ \exists h \in \mathcal{H}: L(h) \geq L(\hat{h},S)+
-\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta_i}{n}} \right] \leq \delta_i 
+\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta}{n}} \right] \leq \delta
 \end{equation}
 %in which we can derive a high probability bound for L as followed:
 \subsection{Question 5}
-Given the infinite hypothesis set $\mathcal{H} = \cup_{Q=1}^\infty \mathcal{H}_Q$ we note from assignment 1 that it is possible to shatter $d+1$ points, when the feature space has dimension d. Our hypothesis set now consist of all monomials  up to infinity and the feature space will therefore have dimension $R^\infty$. Therefore by definition we can shatter all $N$ points, thus the VC dimension is:
+Given the infinite hypothesis set $\mathcal{H} = \cup_{Q=1}^\infty \mathcal{H}_Q$ we note from assignment 1 that it is possible to shatter $d+1$ points when the feature space has dimension d. Our hypothesis set now consist of all monomials  up to infinity and the feature space will therefore have dimension $R^\infty$. Therefore by definition we can shatter all $N$ points (represent all $2^N$ dichotomies), thus the VC dimension is:
 $$ d_{vc}(\mathcal{H}) = \infty $$
 \subsection{Question 6}
 From the bound obtained in question 5, we can re-write it for all $w \in \mathcal{H}$:
@@ -474,7 +476,8 @@ Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 \subsection{Question 7}
 
 \subsection{Question 8}
-From question 6, we note that even if the margin is large, the generalization will be bad if the hypothesis has a large VC dimension, as we multiply with the number of monomials. The intuitive notion behind this is that we can't map our input space to an infinite feature space and expect that maximizing the margin will provide a good generalization. Thus it follows from corollary 3.11 that when we have an infinite VC dimension, it is impossible to achieve a high probability bound as $n$ goes to infinity. 
+From question 6, we note that even if the margin is large, the generalization will be bad if the hypothesis has a large VC dimension, as we multiply with the number of monomials. The intuitive notion behind this is that we can't map our input space to an infinite feature space and still have the property that maximizing the margin will provide a good generalization. Thus it follows from corollary 3.11 that when we have an infinite VC dimension, it is impossible to achieve a high probability bound, as $n$ goes to infinity. 
 \subsection{Question 9}
-Minimizing the bound leads to a greater generalization of the model, however the flexibility of the model is limited, resulting in a bigger error. Maximizing the margin (minimizing $||w||^2$) leads to a better generalization of the data as it ensures that unseen data are more likely to be classified correctly. There is a trade-off when minimizing the generalization, as minimizing means to limit the $Z$ space of the given hypothesis. While achieving a good generalization, the limited model may fail to capture important parts of the data which a more complex hypothesis could have, thus resulting in a bad model. 
+%TODO error bar
+Minimizing the bound leads to a greater generalization of the model, however the flexibility of the model is limited, resulting in a bigger error. Maximizing the margin (minimizing $||w||$) leads to a better generalization of the data, as it ensures that unseen data are more likely to be classified correctly. There is a trade-off when minimizing the generalization bound, as minimizing means to limit the size of the feature space of the given hypothesis. While achieving a good generalization, the limited model may fail to capture important parts of the data which a more complex hypothesis could have, thus resulting in a bad model. 
 \end{document}

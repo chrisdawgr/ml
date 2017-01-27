@@ -123,12 +123,12 @@ Normalizing the error w.r.t the variance yields the following result:
 \dfrac{0.0018621}{0.0106043856253} = 0.17559716006
 \end{align}
 % variance we can expect
-One can say that the MSE estimates the error variance. If we have that the points are distributed at random, the variance and the MSE of the linear fit will be close to identical, thus \eqref{eq:vars} will be 1. The only way we can have that \eqref{eq:vars} is greater than 1 is if the data is not linear as the otherwise the MSE will be less than the variance. If the data is perfectly linear and we apply linear regression, then the only way we can have that \eqref{eq:vars} is greater than 1 is if the linear fit is worse than the horizontal mean line. However this will not be possible, applying least squares, except if the data don't fit the model.
+One can say that the MSE estimates the error variance. If we have that the points are distributed at random, the variance and the MSE of the linear fit will be close to identical, thus \eqref{eq:vars} will be 1. The only way we can have that \eqref{eq:vars} is greater than 1 is if the data is not linear as the otherwise the MSE will be less than the variance. If the data is perfectly linear and we apply linear regression, then the only way we can have that \eqref{eq:vars} is greater than 1 is if the linear fit is worse than the horizontal mean line. However this will not be possible when applying least squares, except if the data don't fit the model.
 
 \subsection{Question 1.3}
 The file \texttt{KNN.py} implements the k-nearest neighbour and cross-validation algorithms described in this section.
 \\
-For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous assignment, however for regression instead of classification.
+For the non-linear regression method i have chosen the k-nearest neighbour. I have used the same implementation as in the previous weekly assignment, however for regression instead of classification.
 I chose the k-nearest neighbour algorithm is that it usually makes good predictions on the data, without making any assumptions about the data. As the dataset is quite big and consists of many features, this is wanted as finding trends in data can be tough due to the dimensionality. There is although a set of shortcomings that follows the k-nearest neighbour. Although we may not need to make any assumptions on the data, we also assume that each feature contribute equally to the overall estimation, this is however rarely true. The computation time is also very high, when the dataset is big. One last thing which should be accounted for is that each data feature may measure on different scales, which results in features with high numerical ranges dominating low ones. To counter this, the training data has been normalized to exhibit zero-mean and unit-variance. This affine mapping obtained by the training data, has also been applied to the training data. \\
 The process of obtaining the k-nearest neighbours of a sample is the same: The euclidean distance from each point in question is taken to the rest of the points, the top k points with the lowest distances are marked as neighbours.The regression variant doesn't use a voting phase 
 on the target-values of the k-nearest neighbours, but the mean of their target-values instead, as shown in equation \eqref{eq:knn}.
@@ -300,7 +300,7 @@ L(y,\hat{y})_{\text{testnorm}} &= 0.0278
 We note from the above errors that the normalized data yields the same error on the training set, however as expected, we achieve a much better generalization of the data, as the test error is lower.
 %TODO discussion on why
 \subsubsection{Random Forest}
-Intuitively there is no need for normalization as the recursive splitting is not determined by the magnitude of the features, but an impurity measure. The threshold at each node is feature scale invariant, and a scaling of the features will only reflect in a shift of this threshold, thus not impacting the split. \\
+Intuitively there is no need for normalization as the recursive splitting is not determined by the magnitude of the features, but by an impurity measure. The threshold at each node is feature scale invariant, and a scaling of the features will only reflect in a shift of this threshold, thus not impacting the split. \\
 For random forest we split the data, maximizing $G_{d,\theta}(S)$ the information gain. If we consider a split, on a data point $x$ normalized using the affine transformation  $f_{a,b}(x) = x'$. The split is determined by $(d,\theta)=(d,x'_d)$, the following is achieved:
 \begin{equation}
 \theta = x'_d = f_{a,b}(x)_d = ax_d + b_d \Leftrightarrow
@@ -463,7 +463,7 @@ $$ d_{vc}(\mathcal{H}) = \infty $$
 From the bound obtained in question 5, we can re-write it for all $w \in \mathcal{H}$:
 \begin{equation}
 Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
-\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta_i}{n}} \right] \geq 1- \delta_i 
+\sqrt{ \dfrac{8 \text{ ln} (2((2n)^{\lceil || w^2|| \rceil \cdot| \Phi_Q|}+1) (1+ \lceil || w^2|| \rceil \cdot| \Phi_Q|) \lceil || w^2|| \rceil \cdot| \Phi_Q|  / \delta}{n}} \right] \geq 1- \delta 
 \end{equation} 
 %From Question 5 we have that the VC-dimension is infinite, therefore we can shatter all $N$ points and define the growth function as followed:
 %\begin{equation}
@@ -476,7 +476,7 @@ Pr \left[ \forall h \in \mathcal{H}: L(h) \leq L(\hat{h},S)+
 %\end{equation}
 %which is the desired bound, however not dependent on the margin.
 \subsection{Question 7}
-
+Not solved.
 \subsection{Question 8}
 From question 6, we note that even if the margin is large, the generalization will be bad if the hypothesis has a large VC dimension, as we multiply with the number of monomials. The intuitive notion behind this is that we can't map our input space to an infinite feature space and still have the property that maximizing the margin will provide a good generalization. Thus it follows from corollary 3.11 that when we have an infinite VC dimension, it is impossible to achieve a high probability bound, as $n$ goes to infinity. 
 \subsection{Question 9}

@@ -1,0 +1,162 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{latexsym}
+\usepackage{subcaption}
+\usepackage{gensymb}
+\usepackage{caption}
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum}
+\usepackage{tabularx}
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  backgroundcolor=\color{white},   % you must add \usepackage{color} or \usepackage{xcolor}
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+\linespread{1.1} % Line spacing
+
+\pagestyle{fancy}
+\lhead{Ml 2017} % Top left header
+\chead{}
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+\setlength\parindent{16pt} % Removes all indentation from paragraphs
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\title{
+\vspace{1in}
+\textmd{\textbf{Machine Learning - Assignment 6}} \\
+\author{Christoffer Thrysøe - dfv107}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+\pagenumbering{arabic}
+\section{1 Kernel-induced metric}
+First we note that:
+\begin{align*}
+||\phi(x) - \phi(z)|| &= \sqrt{ \langle \phi(x) - \phi(z),\phi(x) - \phi(y) \rangle } \\
+&= \sqrt{ \langle k(x,\cdot) - k(z,\cdot), k(x,\cdot) - k(z,\cdot) \rangle}
+\end{align*}
+Applying rules of the inner product on the inner term above yields the following:
+
+\begin{align*}
+\langle k(x,\cdot) - k(z,\cdot), k(x,\cdot) - k(z,\cdot) \rangle &=
+\langle k(x,\cdot), k(x,\cdot) - k(z,\cdot) \rangle - \langle k(z,\cdot) , k(x,\cdot)- k(z,\cdot) \rangle \\
+&=
+\langle k(x,\cdot) - k(z,\cdot), k(x,\cdot) \rangle - \langle k(x,\cdot) - k(z,\cdot), k(x,\cdot) \rangle \\
+&=
+\langle k(x,\cdot) - k(x,\cdot) \rangle - \langle k(z,\cdot),k(x,\cdot) \rangle - \langle k(x,\cdot), k(z,\cdot) \rangle + \langle k(z,\cdot), k(z,\cdot) \rangle \\
+&= \langle k(x,\cdot), k(x,\cdot) \rangle - 2 \langle k(z,\cdot), k(x,\cdot) \rangle + \langle k(z,\cdot), k(z,\cdot) \rangle \\
+&= k(x,x) - 2k(z,x) + k(z,z)
+\end{align*}
+Inserting this into the original equation we get the following:
+\begin{equation*}
+||\phi(x) - \phi(z)|| = \sqrt{k(x,x) - 2k(z,x) + k(z,z)}
+\end{equation*}
+Thus concluding the proof
+\section{2. SVM in practice}
+\subsection{2.1 Data normalization}
+The data normalizing procedure is located in the file \texttt{normalize.py}. The code has been reused from assignment 2.
+\begin{table}[H]
+\centering
+\caption{Mean and variance of the training and test data}
+\label{Mean and variance of the training and test data}
+\begin{tabular}{|c|c|c|} 
+\hline
+ & Training Data  & Transformed Test Data  \\
+ \hline
+ Mean & 21.823 & 0.126
+ \\
+ \hline
+ Variance & 3316.841  & 1.572
+ \\
+ \hline
+\end{tabular}
+\end{table}
+\subsection{2.2 Model selection using grid-search}
+The implementation for cross-validation is found in the file \texttt{svmc.py}
+I have used the \texttt{Libsvm} implementation of support vector machine, using the radial basis function / Gaussian as a kernel. I have evaluated the following values for C: 
+$$ [0.01, 0.1, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000] $$
+and for $\gamma$:
+$$
+[1.0 \cdot 10^{-6}, 1.0 \cdot 10^{-5}, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]$$
+For the cross validation, the training data is split into 5 roughly equal sized arrays. Each partition is evaluated as the validation set at turn. The error is then measured for all combinations of C and $\gamma$. The combination of C and $\gamma$, resulting in the lowest error, is then stored. After running the cross validation for all validation sets, the combination of parameters resulting in the lowest validation error over all validation sets is then returned. This combination of parameters is then used to evaluate the generalization error.  The following table shows the result of running the cross validation algorithm:
+\begin{table}[H]
+\centering
+\caption{Best hyperparameter configuration}
+\label{}
+\begin{tabular}{|c|c|c|} 
+\hline
+Avg. Error & $\gamma$   & C  \\
+ \hline
+ 0.11158 & 0.1 & 1 \\
+ \hline
+\end{tabular}
+\end{table}
+The hyperparameters were chosen by identifying the smallest average error of all parameter combinations across 5-cross-validation. This is identified by accumulating the grid matrices, and taking the average over five folds, the index of the entry with the smallest  average error, identifies the best hyper parameters. \\ I ran the SVM using the above hyperparameters, using both raw data and normalized data for training and testing, the result was:
+\begin{table}[H]
+\centering
+\caption{Generalization error}
+\label{}
+\begin{tabular}{|c|c|} 
+\hline
+ & Error \\
+ \hline
+ Test Data & 0.216
+ \\
+ \hline
+ Normalized test Data & 0.134
+ \\
+ \hline
+\end{tabular}
+\end{table}
+Thus normalizing the data greatly improves the generalization.
+\end{document}

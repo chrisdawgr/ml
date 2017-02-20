@@ -6,8 +6,6 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import kmeans as km
 
-filename = "ML2016TrafficSignsTrain.csv"
-
 """
 Load the data and remove targetValues
 """
@@ -41,21 +39,27 @@ def assignLabels(target):
 Compute the k principle components
 """
 def getPCA(filename,k):
+  # seperate features and targetvalues
   features,targetValues = prepareData(filename)
+  # determine the shapes of each signs
   shapes_signs = assignLabels(targetValues)
+  # calculate the mean of the input data
   meanVals = np.mean(features, axis=0)
   meanRemoved = features - meanVals
+  # compute the covarinace matrix of the meanless data
   covMat = np.cov(meanRemoved,rowvar=0)
+  # get teh eigenvalues and eigenvectors
   eigVals,eigVects = np.linalg.eig(np.mat(covMat))
-  eigVals = np.real(eigVals)
-  eigVects = np.real(eigVects)
+  eigVals = np.real(eigVals); eigVects = np.real(eigVects)
+  # sort the eigenvalues
   eigValInd = np.argsort(eigVals)
   topvalList = eigVals[eigValInd][::-1]
-  # To plot the eigenspectrum:
-  #plotSpectrum(topvalList)
+  # plot eigenspectrum
+  plotSpectrum(topvalList)
   eigValInd = eigValInd[:-(k+1):-1]
   sortFeat = targetValues[eigValInd]
-  redEigVects = eigVects[:,eigValInd]
+  # get principle components by retreiving the top k eigenvectors
+  principleComponents = eigVects[:,eigValInd]
   percentile = 0
   eigenSum = np.sum(eigVals)
   for i in range(len(topvalList)):
@@ -63,19 +67,18 @@ def getPCA(filename,k):
     percent = percentile / eigenSum
     if percentile/eigenSum > 0.90:
       component = i
+      print "90 percent of the variance explained at component: " + str(i+1)
       break
-  z = np.dot(meanRemoved,redEigVects)
+  z = np.dot(meanRemoved,principleComponents)
   x =  z[:,0]
   y =  z[:,1]
-
-  plot(x,y,shapes_signs,meanRemoved,redEigVects)
+  plot(x,y,shapes_signs,meanRemoved,principleComponents)
 
 """
 Function for plotting the projected data and the 4 clusters
 """
-def plot(x,y,label,meanRemoved,redEigVects):
+def plot(x,y,label,meanRemoved,principleComponents):
   for i in range(1):
-    print "plot iteration: " + str(i)
     fig = plt.figure()
     ax  = fig.add_subplot(111)
     c = ['red','green','blue','orange','black','yellow']
@@ -83,15 +86,14 @@ def plot(x,y,label,meanRemoved,redEigVects):
     al = [0.45,1,1,1,1,1]
     for j in range(len(x)):
       ax.scatter(x[j],y[j],c=c[label[j]],marker=m[label[j]],alpha=al[label[j]])
-    clusters = km.kMeans(meanRemoved,4)
-    reducedClusters = np.dot(clusters,redEigVects)
-    x1 = reducedClusters[:,0]
-    y1 = reducedClusters[:,1]
-    cluster = ax.scatter(x1,y1,label='Clusters',c='green',s=700,marker='.')
-    plt.legend(handles=[cluster],loc=3)
-    plt.savefig(str(i) + ' figure')
-    plt.close()
-    #plt.show()
+    #clusters = km.kMeans(meanRemoved,4)
+    #reducedClusters = np.dot(clusters,principleComponents)
+    #x1 = reducedClusters[:,0]
+    #y1 = reducedClusters[:,1]
+    #cluster = ax.scatter(x1,y1,label='Clusters',c='green',s=700,marker='.')
+    #plt.legend(handles=[cluster],loc=3)
+    #plt.savefig('kmeansAndTwpPCA')
+    plt.show()
 
 """
 Function for plotting the eigenspectrum
@@ -103,6 +105,5 @@ def plotSpectrum(yvals):
   plt.yscale('log')
   plt.xlabel('Principle Components')
   plt.ylabel('Eigenvalues')
-  plt.show()
-
-getPCA(filename,2)
+  plt.savefig('eigenSpectrum')
+  #plt.show()

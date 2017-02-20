@@ -4,7 +4,8 @@
 
 \documentclass{article}
 
-\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc} % æøå
+\usepackage[T1]{fontenc}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{float}
@@ -92,7 +93,7 @@
 \vspace{1in}
 \textmd{\textbf{Machine Learning 2016 - Assignment 1}} \\
 %\textmd{Assignment 2 - Resubmission} \\
-\author{Christoffer Thrys�e - dfv107}
+\author{Christoffer Thrysøe - dfv107}
 }
 
 %----------------------------------------------------------------------------------------
@@ -311,7 +312,6 @@ $ \textsf{Pr}[\textsf{"second draw"}] = \textsf{Pr}[\textsf{"second draw"} \vert
     OO & $3/9$ & $2/8$ &  $ 3/9 \times 2/8 = 1/12$\\
     OR & $3/9$ & $5/8$ &  $ 3/9 \times 5/8 = 5/24$\\
     OB & $3/9$ & $1/8$ &  $ 3/9 \times 1/8 = 1/24$\\
-    BB & $1/9$ & $0/8$ &  $ 1/9 \times 0/8 = 0$\\
     BR & $1/9$ & $5/8$ &  $ 1/9 \times 5/8 = 5/72$\\
     BO & $1/9$ & $3/8$ &  $ 1/9 \times 3/8 = 1/24$\\
   \end{tabular}
@@ -330,13 +330,13 @@ To compute the expected value of $X$, i will use the general formula:
 \mathbf{E}[X] = \sum\limits_{x \in \mathbf{X}} x  Pr[\mathbf{X} = x]
 \label{expectation}
 \end{equation}
-We saw from question 3 that the possible outcomes for $X$ is 0,1 or 2, to get the probability of each value, each sample space satisfying one of the values are summed for the specific value.
+We saw from question 3 that the possible outcomes for $X$ is 0,1 or 2. To get the probability of each possible outcome, each sample space satisfying the values are summed, for the specific value.
 \begin{align*}
 Pr[X=0] &= \dfrac{5}{18} + \dfrac{5}{72} + \dfrac{5}{72} = \dfrac{5}{12} \\
 Pr[X=1] &= \dfrac{5}{24} + \dfrac{5}{24} + \dfrac{1}{24} + \dfrac{1}{24} = \dfrac{1}{2} \\
 Pr[X=2] &= \dfrac{1}{12} \\
 \end{align*}
-The numbers can now be used in equation \eqref{expectation}:
+The values can now be used in equation \eqref{expectation}:
 $$
 \mathbf{E}[X] = (0 \times \dfrac{5}{12}) + (1 \times \dfrac{1}{2}) + (2 \times \dfrac{1}{12}) = \dfrac{2}{3}
 $$
@@ -369,7 +369,7 @@ where step 8 follows from X and Y being independent random variables.
   \centering
   \label{tab:table1}
   \begin{tabular}{c||c|c}
-    \textsf{X/Y} & 0 & 1 \\
+    \textsf{k} & 0 & 1 \\
     \hline
     0 & $1/6$ & $3/6$ \\
     1 & $1/6$ & $1/6$\\
@@ -389,7 +389,20 @@ Therefore as $\mathbf{E}[X] \times \mathbf{E}[Y] = \frac{1}{2} $ it is evident t
 
 
 \subsection{Question 4}
-Proof of $ \mathbf{E}[\mathbf{E}[X]] = \mathbf{E}[X] $
+Proof of $ \mathbf{E}[\mathbf{E}[X]] = \mathbf{E}[X] $ \\
+First we write out the inner expected value, thus:
+
+\begin{align*}
+\mathbf{E}[\mathbf{E}[X]] &= \mathbf{E} \left[ \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \right]
+\end{align*}
+The inner term no longer contains a random variable, thus the expected value is just the value, therefore
+\begin{align*}
+\mathbf{E} \left[ \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \right] &= \sum\limits_{x \in \mathbf{X}} x Pr[\mathbf{X} = x] \\ \\
+&=  \mathbf{E}[X]
+\end{align*}
+
+
+
 \subsection{Question 5}
 Proof of $\mathbf{E}\left[(X-\mathbf{E}[X])^2 \right] = 
 \mathbf{E}[X^2]-\left( \mathbf{E}[X] \right) ^2:
@@ -431,10 +444,11 @@ To calculate the probability of observing at least two tails i will calculate th
 $$
 Pr[n,k] = \binom{n}{k}p^k(1-p)^{n-k}
 $$
-For the given example the binomial distribution can be calculated as:
+For the given example the binomial distribution can be calculated, by taking the complement of the event that either 1 or 0 tails are evident. This is calculated as the following:
 $$
-Pr[10,2] = 1 - \binom{10}{2} \left(\dfrac{1}{2}^2\right)\left(1-\dfrac{1}{2}\right)^8
-\approx 0.956
+Pr[A] = 1 - \left( \binom{10}{1} \left(\frac{1}{2}\right)^1\left(1-\frac{1}{2}\right)^9 +
+ \binom{10}{0} \left(\frac{1}{2}\right)^0\left(1-\frac{1}{2}\right)^{10} \right)
+= \frac{1013}{1024}
 $$
 % NOTE: Perhaps should be added with for one as it is at least, no maybe not 
 \section{6. Probability Theory: Coin Flips}
@@ -457,8 +471,3 @@ $$
 $$
 
 \end{document}
-
-
-
-
-
